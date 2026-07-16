@@ -4,8 +4,11 @@
    zodra ze één keer zijn opgehaald, met network-first verversing als er
    verbinding is. */
 
-const APP_CACHE = "duinvakantie-app-v1";
-const RUNTIME_CACHE = "duinvakantie-runtime-v1";
+/* Verhoog dit versienummer bij ELKE inhoudelijke wijziging aan de app —
+   anders detecteert een al-geïnstalleerd toestel de update niet en blijft
+   de oude, gecachete inhoud getoond worden. */
+const APP_CACHE = "duinvakantie-app-v2";
+const RUNTIME_CACHE = "duinvakantie-runtime-v2";
 
 const APP_SHELL = [
   "./",
