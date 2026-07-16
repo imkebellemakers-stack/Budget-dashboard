@@ -1,0 +1,1018 @@
+<!DOCTYPE html>
+<html lang="nl" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Duinvakantie Bloemendaal — 28 juli t/m 6 augustus 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0F5C56">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Duinvakantie">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="icon" href="icons/icon-192.png" type="image/png">
+<link rel="stylesheet" href="vendor/leaflet/leaflet.css">
+<style>
+  :root{
+    --bg:#FDF6E8;
+    --surface:#FFFFFF;
+    --surface-2:#FBEBC9;
+    --ink:#0F5C56;
+    --text:#1B4B48;
+    --muted:#8A7F6E;
+    --strike:#B4AA98;
+    --accent:#FF6B4A;
+    --accent-soft:#FFE1D6;
+    --sage:#1FA398;
+    --sage-soft:#D9F2EF;
+    --gold:#FFB238;
+    --line:#F4DFAE;
+    --header-text:#FFF6EA;
+    --shadow:0 10px 30px -14px rgba(15,92,86,0.28);
+    --shadow-sm:0 3px 12px -6px rgba(15,92,86,0.22);
+    --del:#b98a6f;
+  }
+  html[data-theme="dark"]{
+    --bg:#15181F;
+    --surface:#1E222D;
+    --surface-2:#252A37;
+    --ink:#EEF0F6;
+    --text:#DFE3EC;
+    --muted:#9AA0AF;
+    --strike:#6C7280;
+    --accent:#EC855F;
+    --accent-soft:#33241C;
+    --sage:#5EBBA6;
+    --sage-soft:#14302B;
+    --gold:#E6B657;
+    --line:#2D3340;
+    --header-text:#F3EEE4;
+    --shadow:0 12px 32px -14px rgba(0,0,0,0.6);
+    --shadow-sm:0 4px 14px -7px rgba(0,0,0,0.55);
+    --del:#c9a084;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0 auto;
+    max-width:720px;
+    background:var(--bg);
+    color:var(--text);
+    font-family:'DM Sans',system-ui,sans-serif;
+    line-height:1.55;
+    padding-bottom:72px;
+    box-shadow:0 0 60px -30px rgba(0,0,0,0.3);
+    transition:background .3s ease, color .3s ease;
+  }
+  h1,h2,h3,.display{font-family:'Fraunces',Georgia,serif;color:var(--ink);margin:0;font-weight:600;}
+  .mono{font-family:'DM Mono',monospace;}
+
+  /* ---- HERO ---- */
+  header.hero{position:relative;min-height:340px;display:flex;overflow:hidden;background:linear-gradient(160deg,#0F5C56,#0A3E3A);}
+  .hero-fallback{position:absolute;inset:0;z-index:0;}
+  .hero-fallback svg{width:100%;height:100%;display:block;}
+  .hero-bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;z-index:1;}
+  .hero-bg.imgfail{display:none;}
+  .hero-scrim{position:absolute;inset:0;z-index:2;background:linear-gradient(180deg,rgba(20,24,34,0.18) 0%,rgba(20,24,34,0.04) 30%,rgba(18,22,32,0.5) 62%,rgba(15,18,26,0.88) 100%);}
+  .hero-actions{position:absolute;top:16px;right:16px;z-index:4;display:flex;gap:8px;}
+  .hero-btn{width:40px;height:40px;border-radius:50%;border:1.5px solid rgba(255,255,255,0.42);background:rgba(255,255,255,0.16);color:#fff;font-size:17px;cursor:pointer;display:flex;align-items:center;justify-content:center;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);transition:background .2s;}
+  .hero-btn:hover{background:rgba(255,255,255,0.28);}
+  .hero-content{position:relative;z-index:3;margin-top:auto;padding:24px 22px 26px;color:#fff;width:100%;}
+  .cd-pill{display:inline-flex;align-items:center;gap:6px;font-family:'DM Mono',monospace;font-size:12px;color:#fff;background:rgba(255,255,255,0.18);border:1px solid rgba(255,255,255,0.32);padding:5px 13px;border-radius:999px;margin-bottom:14px;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);}
+  .cd-pill b{font-family:'Fraunces',serif;font-weight:600;font-size:15px;}
+  header.hero .eyebrow{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:#fff;opacity:0.88;margin-bottom:9px;text-shadow:0 1px 8px rgba(0,0,0,0.5);}
+  header.hero h1{color:#fff;font-size:37px;line-height:1.02;letter-spacing:-0.01em;text-shadow:0 2px 20px rgba(0,0,0,0.45);}
+  header.hero .sub{color:#fff;opacity:0.94;margin-top:10px;font-size:14.5px;max-width:540px;text-shadow:0 1px 12px rgba(0,0,0,0.55);}
+
+  /* ---- TABS ---- */
+  nav.sections{display:flex;gap:7px;padding:16px 20px 4px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;position:sticky;top:0;z-index:6;background:linear-gradient(180deg,var(--bg) 78%,rgba(251,244,233,0));}
+  nav.sections::-webkit-scrollbar{display:none;}
+  .tab{flex:0 0 auto;padding:9px 15px;border-radius:11px;border:1px solid var(--line);background:var(--surface);color:var(--ink);font-family:'DM Sans',sans-serif;font-weight:600;font-size:13px;cursor:pointer;white-space:nowrap;transition:all .15s;}
+  .tab:active{transform:scale(0.96);}
+  .tab.active{background:var(--accent);border-color:var(--accent);color:#fff;box-shadow:var(--shadow-sm);}
+
+  main{padding:14px 20px 0;}
+
+  /* ---- LISTS ---- */
+  .cat{font-family:'DM Mono',monospace;font-size:11.5px;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent);margin:22px 0 9px;}
+  .cat:first-of-type{margin-top:8px;}
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:16px;overflow:hidden;box-shadow:var(--shadow-sm);}
+  .row{padding:12px 16px;font-size:14px;border-bottom:1px solid var(--line);}
+  .row:last-child{border-bottom:none;}
+  .row b{color:var(--ink);font-weight:600;}
+  .row a{color:var(--accent);font-weight:600;text-decoration:none;border-bottom:1.5px solid var(--accent-soft);}
+  .row a:hover{border-bottom-color:var(--accent);}
+  .row.two{display:flex;justify-content:space-between;gap:12px;}
+  .row .qty{font-family:'DM Mono',monospace;color:var(--accent);white-space:nowrap;font-size:13px;}
+  .intro{font-size:13px;color:var(--muted);margin:2px 0 4px;line-height:1.6;}
+
+  .note-box{background:linear-gradient(135deg,var(--accent-soft),#fff0);border:1px solid var(--accent);border-radius:16px;padding:15px 17px;margin:6px 0 16px;box-shadow:var(--shadow-sm);}
+  html[data-theme="dark"] .note-box{background:linear-gradient(135deg,#33241c,#33241c00);}
+  .note-box h3{color:var(--accent);font-size:16px;margin-bottom:6px;display:flex;gap:8px;align-items:center;}
+  .note-box p{font-size:13px;margin:6px 0 0;color:var(--text);}
+  .note-box .opt{font-size:12.5px;margin-top:8px;padding-left:12px;border-left:3px solid var(--accent);color:var(--text);}
+
+  .banner{position:relative;height:150px;border-radius:16px;overflow:hidden;margin:2px 0 16px;background:linear-gradient(135deg,var(--sage),var(--ink));box-shadow:var(--shadow);}
+  .banner img{width:100%;height:100%;object-fit:cover;display:block;}
+  .banner .cap{position:absolute;left:0;right:0;bottom:0;background:linear-gradient(transparent,rgba(15,18,26,0.72));color:#fff;font-family:'Fraunces',serif;font-weight:600;font-size:16px;padding:26px 16px 13px;}
+
+  .photo-strip{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-bottom:6px;}
+  .pf{margin:0;position:relative;height:118px;border-radius:14px;overflow:hidden;background:linear-gradient(135deg,var(--sage),var(--ink));box-shadow:var(--shadow-sm);}
+  .pf img{width:100%;height:100%;object-fit:cover;display:block;}
+  .pf figcaption{position:absolute;left:0;right:0;bottom:0;background:linear-gradient(transparent,rgba(0,0,0,0.6));color:#fff;font-family:'DM Mono',monospace;font-size:10.5px;padding:16px 9px 7px;}
+
+  .badge{display:inline-block;font-family:'DM Mono',monospace;font-size:10.5px;color:var(--sage);background:var(--sage-soft);padding:1px 8px;border-radius:6px;margin-left:2px;vertical-align:middle;}
+
+  .budget-box{background:linear-gradient(135deg,var(--sage),var(--ink));color:#fff;border-radius:16px;padding:16px 18px;margin:4px 0 16px;box-shadow:var(--shadow);}
+  .budget-box h3{color:#fff;font-size:17px;margin-bottom:9px;}
+  .budget-box .bl{display:flex;justify-content:space-between;font-size:13.5px;padding:4px 0;border-bottom:1px solid rgba(255,255,255,0.2);}
+  .budget-box .bl:last-child{border-bottom:none;}
+  .budget-box .bl.grand{font-weight:700;font-size:15px;margin-top:6px;padding-top:8px;}
+  .budget-box .bl .a{font-family:'DM Mono',monospace;}
+
+  /* ---- PACKING ---- */
+  .check-row{display:flex;align-items:flex-start;gap:11px;padding:11px 15px;font-size:14px;border-bottom:1px solid var(--line);}
+  .check-row:last-child{border-bottom:none;}
+  .check-row input[type="checkbox"]{margin-top:2px;width:18px;height:18px;accent-color:var(--accent);flex-shrink:0;cursor:pointer;}
+  .check-row .check-text{flex:1;line-height:1.45;}
+  .check-row .check-text b{color:var(--ink);font-weight:600;}
+  .check-row.checked .check-text{text-decoration:line-through;color:var(--strike);}
+  .check-row .del-btn{background:none;border:none;color:var(--del);font-size:16px;line-height:1;cursor:pointer;padding:2px 4px;flex-shrink:0;}
+  .add-row{display:flex;gap:6px;padding:11px 15px;background:var(--surface-2);}
+  .add-row input[type="text"]{flex:1;padding:8px 11px;border-radius:8px;border:1px solid var(--line);font-family:'DM Sans',sans-serif;font-size:13px;background:var(--surface);color:var(--text);}
+  .add-row button{padding:8px 13px;border-radius:8px;border:none;background:var(--sage);color:#fff;font-weight:600;font-size:13px;cursor:pointer;}
+  .pack-top{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:4px 0 8px;}
+  .reset-btn{background:none;border:1px solid var(--line);border-radius:9px;padding:7px 11px;font-size:12px;color:var(--muted);cursor:pointer;white-space:nowrap;}
+  .progress-pill{font-family:'DM Mono',monospace;font-size:12px;background:var(--surface-2);padding:4px 10px;border-radius:8px;color:var(--ink);}
+  .progressbar{height:8px;border-radius:999px;background:var(--surface-2);overflow:hidden;margin:0 0 14px;}
+  .progressbar>span{display:block;height:100%;background:linear-gradient(90deg,var(--gold),var(--accent));transition:width .3s;}
+
+  .credits{font-size:11px;color:var(--muted);margin-top:16px;opacity:0.85;}
+  .credits a{color:var(--muted);}
+
+  /* ---- SURPRISE MODAL ---- */
+  .surprise-overlay{position:fixed;inset:0;background:rgba(20,24,34,0.55);z-index:50;display:none;align-items:center;justify-content:center;padding:24px;}
+  .surprise-overlay.open{display:flex;}
+  .surprise-card{background:var(--surface);border-radius:18px;padding:22px 20px;max-width:420px;width:100%;box-shadow:var(--shadow);position:relative;}
+  .surprise-card h3{font-size:19px;margin-bottom:14px;display:flex;align-items:center;gap:8px;}
+  .surprise-pick{background:var(--surface-2);border-radius:12px;padding:12px 14px;margin-bottom:10px;font-size:13.5px;}
+  .surprise-pick .tag{font-family:'DM Mono',monospace;font-size:10.5px;text-transform:uppercase;letter-spacing:0.08em;color:var(--accent);display:block;margin-bottom:4px;}
+  .surprise-pick b{color:var(--ink);}
+  .surprise-actions{display:flex;gap:8px;margin-top:14px;}
+  .surprise-actions button{flex:1;padding:10px;border-radius:10px;border:none;font-weight:600;font-size:13.5px;cursor:pointer;}
+  .surprise-again{background:var(--surface-2);color:var(--ink);}
+  .surprise-close{background:var(--accent);color:#fff;}
+
+  @media print{
+    .hero-actions,nav.sections,.add-row,.del-btn,.reset-btn{display:none !important;}
+    body{max-width:none;box-shadow:none;}
+    .card,.banner,.note-box,.budget-box{box-shadow:none;break-inside:avoid;}
+    header.hero{-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  }
+
+  /* ---- DAGOVERZICHT: weer, zon & getij ---- */
+  .weather-status{font-family:'DM Mono',monospace;font-size:11.5px;color:var(--muted);margin:0 0 10px;}
+  .weather-status.offline{color:var(--del);}
+  .day-strip{display:flex;gap:10px;overflow-x:auto;padding-bottom:6px;margin:0 0 18px;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
+  .day-strip::-webkit-scrollbar{display:none;}
+  .day-card{flex:0 0 152px;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px 13px;box-shadow:var(--shadow-sm);}
+  .day-card .dd{font-family:'DM Mono',monospace;font-size:10.5px;color:var(--muted);text-transform:uppercase;letter-spacing:0.07em;}
+  .day-card .dnum{font-family:'Fraunces',serif;font-weight:600;color:var(--ink);font-size:18px;margin:2px 0 8px;}
+  .day-card .wx{font-size:12.5px;margin-bottom:6px;}
+  .day-card .meta{font-size:11px;color:var(--muted);display:flex;flex-direction:column;gap:3px;}
+  .day-card .meta .t{font-weight:700;color:var(--ink);font-size:13px;}
+  .day-card .sun{font-size:11px;color:var(--text);margin-top:8px;padding-top:8px;border-top:1px solid var(--line);display:flex;flex-direction:column;gap:3px;}
+  .day-card .tide{font-size:10px;color:var(--muted);margin-top:7px;line-height:1.45;}
+  .day-card .tide a{color:var(--accent);}
+
+  /* ---- KAART MET ROUTES ---- */
+  .map-wrap{border-radius:16px 16px 0 0;overflow:hidden;box-shadow:var(--shadow-sm);border:1px solid var(--line);border-bottom:none;}
+  #routeMap{height:260px;width:100%;background:var(--surface-2);}
+  .map-status{font-family:'DM Mono',monospace;font-size:11px;background:var(--gold);color:#3a2a05;padding:6px 12px;display:none;align-items:center;gap:6px;}
+  .map-status.show{display:flex;}
+  .route-list{background:var(--surface);border:1px solid var(--line);border-radius:0 0 16px 16px;margin-bottom:8px;box-shadow:var(--shadow-sm);}
+  .route-row{display:flex;align-items:flex-start;gap:10px;padding:10px 14px;font-size:13px;border-bottom:1px solid var(--line);}
+  .route-row:last-child{border-bottom:none;}
+  .route-row input[type="checkbox"]{margin-top:2px;width:17px;height:17px;accent-color:var(--accent);flex-shrink:0;cursor:pointer;}
+  .route-row .rt{flex:1;line-height:1.4;}
+  .route-row .rt b{color:var(--ink);font-weight:600;}
+  .route-row .badge-line{font-size:9.5px;text-transform:uppercase;letter-spacing:0.05em;background:var(--sage-soft);color:var(--sage);padding:1px 6px;border-radius:5px;margin-left:6px;white-space:nowrap;}
+  .route-row .badge-link{font-size:9.5px;text-transform:uppercase;letter-spacing:0.05em;background:var(--accent-soft);color:var(--accent);padding:1px 6px;border-radius:5px;margin-left:6px;white-space:nowrap;}
+  .route-row .rlink{display:block;font-size:11.5px;margin-top:3px;}
+  .route-row .rlink a{color:var(--accent);font-weight:600;text-decoration:none;border-bottom:1.5px solid var(--accent-soft);}
+  .leaflet-popup-content-wrapper{background:var(--surface);color:var(--text);border-radius:10px;}
+  .leaflet-popup-tip{background:var(--surface);}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <img class="hero-bg" src="https://commons.wikimedia.org/wiki/Special:FilePath/Duinen%20in%20Nationaal%20Park%20Zuid-Kennemerland.jpg?width=1200" alt="Duinen in Nationaal Park Zuid-Kennemerland" onerror="this.classList.add('imgfail')">
+  <div class="hero-fallback" aria-hidden="true">
+    <svg viewBox="0 0 800 340" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#FFE9C2"/><stop offset="55%" stop-color="#FFC98A"/><stop offset="100%" stop-color="#2FB8C4"/></linearGradient>
+      </defs>
+      <rect width="800" height="340" fill="url(#sky)"/>
+      <circle cx="610" cy="110" r="52" fill="#FFD97D" opacity="0.9"/>
+      <path d="M0,225 Q150,270 320,232 T660,232 T800,226 L800,340 L0,340 Z" fill="#0F5C56" opacity="0.30"/>
+      <path d="M0,255 Q120,228 240,246 T500,240 T800,248 L800,340 L0,340 Z" fill="#1FA398"/>
+      <path d="M0,285 Q100,262 220,278 T460,272 T800,280 L800,340 L0,340 Z" fill="#0F5C56"/>
+    </svg>
+  </div>
+  <div class="hero-scrim"></div>
+  <div class="hero-actions">
+    <button class="hero-btn" id="surpriseBtn" title="Verras me" aria-label="Verras me met een idee">🎲</button>
+    <button class="hero-btn" id="shareBtn" title="Deel met Daan" aria-label="Deel met Daan">📤</button>
+    <button class="hero-btn" id="themeToggle" title="Licht / donker" aria-label="Wissel licht/donker">🌙</button>
+  </div>
+  <div class="hero-content">
+    <div class="cd-pill" id="countdown"><span id="cdText">laden…</span></div>
+    <div class="eyebrow">De Lakens · Bloemendaal aan Zee · 28 juli – 6 augustus 2026</div>
+    <h1>Duin, strand &amp; zee</h1>
+    <div class="sub">Losse ideeën om per dag uit te kiezen — activiteiten, eten, koffie, koopjes, boodschappen en inpakken. Voor Imke &amp; Daan.</div>
+  </div>
+</header>
+
+<nav class="sections">
+  <button class="tab active" data-target="act">Activiteiten</button>
+  <button class="tab" data-target="eten">Eten</button>
+  <button class="tab" data-target="coffee">Koffie &amp; Lunch</button>
+  <button class="tab" data-target="deals">Voordelig</button>
+  <button class="tab" data-target="shop">Boodschappen</button>
+  <button class="tab" data-target="pack">Inpakken</button>
+</nav>
+
+<main>
+  <div id="actWrap"></div>
+  <div id="etenWrap" style="display:none;"></div>
+  <div id="coffeeWrap" style="display:none;"></div>
+  <div id="dealsWrap" style="display:none;"></div>
+  <div id="shopWrap" style="display:none;"></div>
+  <div id="packWrap" style="display:none;"></div>
+</main>
+
+<div class="surprise-overlay" id="surpriseOverlay">
+  <div class="surprise-card">
+    <h3>🎲 Zin in vandaag?</h3>
+    <div id="surpriseContent"></div>
+    <div class="surprise-actions">
+      <button class="surprise-again" onclick="surpriseMe()">Nog een keer</button>
+      <button class="surprise-close" onclick="closeSurprise()">Prima, gaan we doen</button>
+    </div>
+  </div>
+</div>
+
+<script src="vendor/leaflet/leaflet.js"></script>
+<script>
+const ACTIVITIES = {
+  "Wandelroutes":[
+    ["Kennemerduinen — Vogelmeer &amp; Kraansvlak","Direct vanaf de camping het duin in. Kort rondje (~5 km) via het Vogelmeer, of langer richting het Bloemendaalse Bos. In het Kraansvlak-gebied lopen het hele jaar wilde paarden en Schotse hooglanders. Let op: de Wisentenroute (bizons) is 's zomers gesloten (alleen 1 sep–eind feb). GPX &amp; kaart: <a href=\"https://www.alltrails.com/trail/netherlands/north-holland/ns-wandeling-kennemerduinen\" target=\"_blank\" rel=\"noopener\">AllTrails</a> · <a href=\"https://www.wandelnetwerknoordholland.nl/startpunten/routes-vanaf-dit-startpunt/2628\" target=\"_blank\" rel=\"noopener\">Wandelnetwerk Bloemendaal</a>."],
+    ["Lange duinhike Koevlak–Parnassia (~12-14 km)","Stevige route door duinvalleien, terug via het strand met de voeten in het water. Verrekijker mee voor grazers, reeën en vogels. GPX: <a href=\"https://www.alltrails.com/trail/netherlands/north-holland/kennemerduinen-koevlak-parnassia\" target=\"_blank\" rel=\"noopener\">AllTrails Koevlak–Parnassia</a>."],
+    ["Amsterdamse Waterleidingduinen — ingang De Zilk","Rustige, zuidelijke ingang. Damherten en vossen spotten, of de historische WOII-bunkerroute lopen. Kleine entree. <a href=\"http://awd.waternet.nl/\" target=\"_blank\" rel=\"noopener\">Routekaart awd.waternet.nl</a>."],
+    ["Strandwandeling Bloemendaal–Zandvoort v.v. (~10 km)","Juist een fijne route bij wat wind. Breed strand, veel lucht. Onderweg een strandtent voor koffie of een borrel."],
+    ["Noordvoort &amp; Strandpaal 64","Ongerept strandreservaat tussen Zandvoort en Noordwijk — heel breed en leeg, geen honden. Paal 64 is een stil 'geheim' stuk strand."],
+    ["Hofjeswandeling Haarlem","Verborgen middeleeuwse binnentuinen zoals het Hofje van Bakenes — oases van stilte, vlak bij de Grote Markt. Mooi te combineren met de fietsroute naar de stad."],
+    ["Amsterdam-Noord wandeling","NDSM-werf (streetart, loodsen) → langs het IJ naar EYE → door het Vliegenbos naar dorpje Nieuwendam; eventueel door naar Het Twiske (Schotse hooglanders). Route: <a href=\"https://www.iamsterdam.com/zien-en-doen/natuur-en-actief/routes/wandelroute-door-ndsm\" target=\"_blank\" rel=\"noopener\">I amsterdam</a> · <a href=\"https://www.wikiloc.com/hiking-trails/verrassend-amsterdam-noord-13667750\" target=\"_blank\" rel=\"noopener\">Wikiloc GPX</a>. Niet op 1 aug (Canal Parade, extreem druk)."],
+    ["Amsterdam-Oost, minder standaard (~6 km)","Voor als het centrum en de bekende wijken al bekend terrein zijn: start bij de Dappermarkt, loop de Javastraat door (Indische buurt, multicultureel en veel eetadresjes), door naar het Oosterpark (Verzetsmuseum en Tropenmuseum liggen aan de rand), en eindig bij het rustige Flevopark aan het water — heel andere sfeer dan de grachtengordel, nauwelijks toeristen."],
+  ],
+  "Fietsroutes":[
+    ["Duin naar stad → Haarlem","Via de Zeeweg en Brouwerskolkweg rechtstreeks vanaf de camping naar de historische binnenstad, ± 20 minuten."],
+    ["Bloemendaal → Zandvoort boulevard (~10 km)","Langs zee, mooi in de ochtend, met een duik in zee als tussenstop."],
+    ["Buitenplaatsen-tocht (~35 km)","Door de duinen noordwaarts naar Landgoed Beeckestijn (Franse &amp; Engelse tuinen) en terug via de indrukwekkende sluizen van IJmuiden. Een hele dag fietsen."],
+    ["Fort bij Vijfhuizen — Stelling van Amsterdam","UNESCO-fort in het polderland ten oosten van Haarlem, met kunst en een café. Leuke rit door weiland en langs water."],
+    ["Kraansvlak-stop","Onderweg op de Zandvoort-route: even stoppen bij het uitkijkpunt voor wilde paarden of hooglanders."],
+  ],
+  "Strand, zee &amp; zonsondergang":[
+    ["Strandtent Parnassia","Rustieke, autovrije strandtent verscholen in de duinen (alleen te voet of per fiets bereikbaar) — heerlijk voor een drankje of lunch met uitzicht, weg van de drukte."],
+    ["Beachclubs voor de zonsondergang","Bloemendaal aan Zee staat bekend om zijn strandtenten: Republiek, Woodstock 69, Bloomingdale — een borrel met de voeten in het zand terwijl de zon in zee zakt (± 21:30 begin van jullie week)."],
+    ["Zonsopkomst op het strand","Voor zonsopkomst het strand op — dit jaargetijde vaak helemaal stil en van jullie alleen."],
+    ["Zwemmen &amp; getij","Let op de vlaggen van de strandwacht en op muistromen; zeewater is begin augustus ± 18-19°C. Bij aflandige (ooste)wind geen luchtbedden mee het water in."],
+    ["Skaten of steppen op de vroege boulevard","Vóór de drukte een rustig, vlak stuk asfalt langs zee in Zandvoort — leuk met skates of longboard."],
+  ],
+  "Op &amp; rond de camping":[
+    ["Duinpad naar het strand","Vanaf De Lakens loop je in ~100 stappen het duin over naar het strand — perfect voor een snelle ochtend- of avonddip."],
+    ["Surfschool Surfana","Surf- en skatelessen, op de camping zelf."],
+    ["Wellness, duinsauna &amp; yoga","Op de camping — fijn voor een rustdag."],
+    ["Restaurant Gestrand","Terras, speeltuin en livemuziek, op de camping."],
+    ["Wandelpark Caprera (Bloemendaal)","40 hectare op het Kopje van Bloemendaal, de hoogste duintop van de streek — uitzichtpunten over stad, duin en zee, plus een meertje. Dagkaart €1 p.p., dagelijks 10:00-16:00 (alleen pin). Openluchttheater Caprera geeft er concerten en films."],
+    ["Sterren kijken op het strand","Minder lichtvervuiling dan de stad — op een heldere, maanloze avond de moeite waard."],
+    ["Zeekraal spotten","Groeit wild langs sommige duinovergangen en is eetbaar — leuk weetje onderweg."],
+  ],
+  "Verborgen plekjes &amp; natuur":[
+    ["Thijsse's Hof (Overveen)","De oudste heemtuin van Nederland, klein en intiem, vlak bij station Overveen."],
+    ["Landgoed Elswout (Overveen)","19e-eeuwse buitenplaats met kronkelpaden, monumentale bomen, een hertenkamp en houten boogbruggetjes. Schaduwrijk — fijn bij warm weer."],
+    ["Hertenkamp Bloemendaal","Piepklein hertenkamp midden in het dorp, leuk als kort tussenstopje."],
+    ["Eerebegraafplaats Bloemendaal","Erebegraafplaats voor gefusilleerde verzetsstrijders, midden in het duin. Indrukwekkend en stil."],
+    ["Atlantikwall-bunkers","Verscholen WOII-bunkers in de duinen tussen Zandvoort en IJmuiden, sommige vrij toegankelijk vanaf de paden."],
+    ["Bezoekerscentrum De Kennemerduinen","Klein, gratis bezoekerscentrum bij de duiningang met info over flora, fauna en routes — droog als een bui overtrekt."],
+    ["Circuit Zandvoort van buitenaf","Vanaf de duinen zie je een stuk van het circuit liggen — leuk detail, kost niets. (De laatste Dutch GP is 21-23 aug, net ná jullie vakantie.)"],
+  ],
+  "Bij slecht weer (binnen)":[
+    ["Teylers Museum, Haarlem","Het oudste museum van Nederland (1784) — een prachtig 18e-eeuws 'wondermuseum' met fossielen, instrumenten en tekeningen van o.a. Michelangelo en Rembrandt. Perfect voor een regendag."],
+    ["Frans Hals Museum, Haarlem","Gouden-Eeuwmeesters in een voormalig oudemannenhuis, met moderne kunst als contrast. Vlak bij de Grote Markt."],
+    ["Corrie ten Boomhuis, Haarlem","Barteljorisstraat 19. Het huis van de familie Ten Boom, die tijdens WOII Joodse onderduikers verborg achter een valse muur — indrukwekkend verhaal, ingerichte 'Schuilplaats'. Open di-za, alleen op rondleiding (reserveren!), ± 1 uur, gratis toegang met vrijwillige bijdrage."],
+    ["EYE Filmmuseum, Amsterdam-Noord","Spectaculair gebouw aan het IJ met wisselende exposities; de pont ernaartoe is gratis, het waterterras ook leuk zonder ticket."],
+    ["Pathé Haarlem","Zijlvest 41-43, Raakskwartier — vlak bij het centrum en station. Met jullie Pathé-abonnement kost een regendagfilm niks extra. 8 zalen, dagelijks open."],
+    ["Pathé Amsterdam-Noord","Buikslotermeerplein 2003, bij metrostation Noord (niet bij de NDSM-pont, wel goed bereikbaar met de metro). Handig achterdeurtje als het op je Amsterdam-dag onverwacht gaat regenen."],
+  ],
+  "Gratis dagtripjes in de buurt":[
+    ["Zaanse Schans","Groene houten huisjes en werkende molens — het dorp en de molens van buiten bekijken is gratis. Trein naar station Zaandijk Zaanse Schans (~20 min vanaf Amsterdam)."],
+    ["Zeesluis IJmuiden","De grootste zeesluis ter wereld — gratis te bekijken vanaf het uitzichtpunt, indrukwekkend met grote zeeschepen. Combineer met het brede strand van IJmuiderslag."],
+    ["Spaarndam &amp; Hansje Brinker","Pittoresk vestingdorpje aan het Spaarne met het beroemde monument, ± 20 min fietsen vanaf Haarlem. Gratis en sfeervol."],
+  ],
+  "Te doen tijdens jullie verblijf (met datum)":[
+    ["WorldPride Amsterdam · 25 jul – 8 aug","Amsterdam is dit jaar gastheer. Hoogtepunt: de Canal Parade op za 1 aug (12-18u) — spectaculair, maar dé drukste dag van het jaar. Amsterdam-plannen liever op een andere dag (ma 3/8 is het rustigst)."],
+    ["Pride at the Beach · Zandvoort, t/m 2 aug","Vrolijke strandeditie vlak bij de camping in jullie eerste dagen."],
+    ["Haarlem Culinair · Grote Markt, 30 jul – 2 aug","Proeverijen van regionale restaurants; gratis toegang, hapjes met munten. Do 17-24u, vr/za 13-24u, zo 13-23u."],
+    ["The Gardens of Babylon · Zuid Strand Zandvoort, 31 jul – 2 aug","Kleurrijk, spiritueel strandfestival (kaartjes per dag); ook langs de rand leuk."],
+    ["Ibiza Markt &amp; Amsterdamse Avond · Zandvoort, 1 aug","Markt op de boulevard en een muziekfestival in het dorp — fijne kustvariant op parade-dag."],
+    ["Zandvoort Racefestival warming-up · vanaf 2 aug","Gratis kermis, reuzenrad en F1-sfeer in het dorp (t/m 19 aug)."],
+    ["BioMarkt Kweektuin · Haarlem, 1 aug","Biologische streekmarkt (1e zaterdag v/d maand, mrt-nov) in de Haarlemmer Kweektuin. Vroeg komen."],
+    ["Weekmarkt Zandvoort · wo (29 jul &amp; 5 aug)","Grote Krocht, 9-16u. Verse vis en groente, dichtbij."],
+  ],
+  "Logistiek":[
+    ["Station Overveen","10 min fietsen vanaf de camping, ~20 min naar Amsterdam Centraal."],
+    ["Bus 81","Stopt bij de camping (halte De Lakens), richting station Zandvoort of Haarlem."],
+    ["Fietsverlichting","De duinfietspaden zijn 's avonds pikdonker — zorg voor goede lampjes."],
+    ["NS Dal Vrij-abonnement — daluren","Met jullie €49-abonnement reis je gratis doordeweeks van 9:00-16:00 en na 18:30, en het hele weekend. Tussen 16:00-18:30 en vóór 9:00 op werkdagen geldt het gewone tarief — plan de terugreis van een Amsterdam-dag daar even omheen."],
+    ["Zwemveiligheid — vlaggen op het strand","Rood-geel = bewaakte zone tussen de vlaggen, hier zwemmen aanbevolen. Geel = gevaarlijk, extra voorzichtig. Rood = sterk afgeraden. Dubbel rood = zwemverbod. Zwart-wit geblokt = watersportzone, niet zwemmen. De Zandvoortse Reddingsbrigade hangt deze bij de reddingsposten op het strand — check even voor je het water in gaat, zeker bij aflandige wind."],
+  ],
+};
+
+const ETEN = {
+  "Ontbijt-ideeën":[
+    ["Luxe bakkersontbijt","Vers zuurdesembrood of croissants van de Haarlemse bakker, Franse kaas, goede ham, confituur en een gekookt eitje."],
+    ["Yoghurt-bowl met marktfruit","Griekse yoghurt of kwark met vers fruit (bessen, perzik), granola en honing."],
+    ["Avocado-toast &amp; krokante bacon","Toast met avocado en ei; bacon lekker knapperig uit de airfryer (180°C, ± 8 min)."],
+    ["Amerikaanse pannenkoekjes &amp; bacon","Pannenkoek- of wafelmix met ahornsiroop, vers fruit en bacon — feestelijk ontbijt."],
+    ["Overnight oats","Havermout + yoghurt + fruit, de avond ervoor gemaakt — ideaal om mee te nemen op een dagtrip."],
+    ["Stevig: eieren, bacon &amp; toast","Roerei of gebakken eieren met bacon en toast — perfect vóór een lange wandeldag."],
+  ],
+  "Lunch-ideeën (vaak onderweg)":[
+    ["Mezze-picknick in de duinen","Hummus, olijven, feta, tomaat, komkommer en plat brood — makkelijk mee de duinen in."],
+    ["Kibbeling van Berg Vis / de markt","Verse kibbeling of een vislunch in Zandvoort — goedkoop en lekker."],
+    ["Caprese-wrap","Wrap met mozzarella, tomaat, basilicum en pesto — snel en fris voor op het strand."],
+    ["Albert Cuypmarkt","Op de Amsterdam-dag: kibbeling, haring, verse stroopwafels en goedkope wereldkeuken."],
+    ["Terras of Haarlem Culinair","Broodje of salade op een terras, of hapjes scoren op Haarlem Culinair (30 jul–2 aug)."],
+    ["Restjes of wandelpicknick","BBQ-restjes van de vorige avond, of wraps + noten + fruit voor onderweg."],
+  ],
+  "Diner — gourmetplaat-avonden":[
+    ["Mixed grill","Gemarineerde kipreepjes, verse worstjes, halloumi, champignons en groente, met stokbrood en knoflooksaus. Makkelijke eerste avond."],
+    ["Aziatisch","Bulgogi-kip of -rund, garnalen, paksoi en wortel, in mini-wraps met ketjap, pindasaus en sriracha-mayo."],
+    ["Grieks","Kip-souvlaki, halloumi, gegrilde groente, tzatziki, warme pita en Griekse salade."],
+    ["Tex-Mex","Fajita's &amp; quesadilla's: kipreepjes met fajitakruiden, paprika en ui, tortilla's, kaas, guacamole, salsa en zure room."],
+    ["Surf &amp; Turf (feestelijke afsluiter)","Biefstukpuntjes én gamba's, gegrilde groente, stokbrood met kruidenboter en chimichurri."],
+  ],
+  "Diner — airfryer &amp; vis":[
+    ["Verse marktvis","Witvis of zeebaars van de weekmarkt uit de airfryer (200°C, ± 10-12 min) met krokante krieltjes, groene groente en citroen-knoflookboter."],
+    ["Het grote BBQ-feest","Spareribs krokant uit de airfryer (180°C, ± 25 min), gemarineerde kipdijen &amp; garnalenspiesjes op de gourmetplaat, maïskolf, gepofte zoete aardappel en coleslaw."],
+    ["Sticky chicken wings","Kippenvleugels met bbq- of buffalo-glaze (airfryer 200°C, ± 20 min), maïs en een frisse dip — weinig werk, veel smaak."],
+    ["Comfortfood","Krokante kipschnitzel met airfryer-friet en een frisse salade — luie herstelavond."],
+  ],
+  "Een avond uit eten (geen kookavond)":[
+    ["Novecento, Haarlem","Begrip in de stad — pizza's vanaf €6,95, gezellig en druk, geen poespas. Ideale eerste of laatste avond zonder gedoe met boodschappen."],
+    ["Roast, Haarlem","Chicken bar aan de Turfmarkt: spit-kip met sauzen, friet en salades, hoofdgerecht rond de €15. Casual en laagdrempelig."],
+    ["Jetties, Haarlem","Gezonde bowls, burgers, pasta's en curry's, veel biologisch en vega. Fijn als jullie een avond iets lichters willen dan gourmetten."],
+    ["Berg Vis, Zandvoort","Ook gewoon ter plekke opeten mogelijk — verse kibbeling of vislunch aan zee, zonder strandtent-prijzen."],
+    ["Warung Spang Makandra, Amsterdam","Iconisch goedkoop Surinaams-Javaans eethuis, klein en altijd druk — op je Amsterdam-dag een echte lokale klassieker."],
+    ["Foodhallen, Amsterdam-West","Foodcourt met tientallen kraampjes (van dumplings tot burgers), ieder wat wils en voor elk budget — samen aanschuiven zonder te hoeven kiezen wie waar naartoe wil."],
+  ],
+  "Toetjes &amp; lekkers onderweg":[
+    ["Verse stroopwafel van de kraam","Warm gebakken op de weekmarkt in Zandvoort of Haarlem — beter dan de verpakte variant."],
+    ["IJssalon na het strand","Een bolletje ijs in Zandvoort of Haarlem als afsluiter van een strand- of wandeldag."],
+    ["Wafels of pannenkoeken op de camping","Restaurant Gestrand of zelf met de pannenkoek-/wafelmix uit het ontbijt-lijstje, 's avonds als toetje."],
+  ],
+};
+
+const COFFEE = {
+  "Bij de camping (Bloemendaal/Overveen/Zandvoort)":[
+    ["Het Lokaal Zandvoort","Laagdrempelig buurtcafé. Koffie met vers appelgebak voor 2 personen voor €8,50 — check ter plekke of de Zandvoortpas-korting (€1 p. kopje) ook voor bezoekers geldt."],
+    ["Blue Zone Espresso (Zandvoort)","Haltestraat 23, dagelijks vanaf 7:00. Betaalbare take-away koffie en ontbijt, geen dure specialty-kaart."],
+    ["Kaashoek Zandvoort — lunch","Simpel en snel een goed belegd broodje, geen toeristenprijzen."],
+  ],
+  "Haarlem":[
+    ["Native","Breestraat 23, vanaf 8:00. Ligt op de route van de Hofjeswandeling. Normale koffieprijzen."],
+    ["Ax Specialty Café","Koningstraat 58, vanaf 7:00. Vlakbij het station — handig als eerste stop bij aankomst of vertrek."],
+    ["Coffee Habits","Smedestraat 25. Klein, knus lokaal koffiebarretje."],
+    ["Het Broodjeshuis — lunch","Centrum Haarlem, verse broodjes en salades vanaf €3,10 — een van de goedkoopste goede lunchopties."],
+  ],
+  "Amsterdam-Noord (NDSM-kant)":[
+    ["Sam's Koffie","Meeuwenlaan 126B, Hamerkwartier. Cappuccino €3,20 — een van de goedkoopste van de stad."],
+    ["Van de Werf (NDSM-Kade)","Elke ochtend 9:00-10:00 koffie/thee voor €1 (ook haver). 's Middags op maandag het gerecht van de week voor €12,50."],
+    ["Kometen Brood &amp; Café","NDSM-werf, dagelijks vanaf 8:00. Bakkerij-koffie met vers zuurdesembrood, vlak bij de pont."],
+    ["Broodje Vasum — lunch","NDSM-terrein. Verse belegde broodjes, elk uur vers gebakken bolletjes — prima prijs/kwaliteit."],
+  ],
+  "Amsterdam centrum &amp; eromheen":[
+    ["Gebroeders Niemeijer (centrum)","Nieuwendijk 35. Klassieke Franse boulangerie, won de Parool-croissanttest — geen vegan-insteek nodig, gewoon hele goede croissants en stokbroden. Prima alternatief voor Saint-Jean, meestal beter te doen qua drukte."],
+    ["Margo's (Oud-West)","Vegan bakery bij de Foodhallen — croissants, cookies en sandwiches met specialty coffee, meestal geen rij. Ook een optie als je toch íets vergelijkbaars met Saint-Jean zoekt."],
+    ["Bakkerij Louf (West/Oud-Zuid/Westerpark)","Verse broden, croissants en focaccia; zoet broodje ± €4,50. Inmiddels 3 vestigingen."],
+    ["Bagels &amp; Beans","Meerdere vestigingen; goed belegde bagel vanaf €3,50 — voor Amsterdam goedkoop."],
+    ["Sir Hummus / The Hummus House","Hummusschotel met pita en rauwkost voor ± €6,50."],
+    ["Café 't Gasthuys","Kneuterig bruin café in het centrum, lunch onder de €10."],
+  ],
+};
+
+const DEALS = {
+  "Geld besparen — apps &amp; slimme trucs":[
+    ["Too Good To Go","Dé bespaar-app: bakkers, supermarkten en lunchzaken verkopen aan het eind van de dag hun onverkochte eten in een 'Magic Box' voor ~1/3 van de prijs. Volop deelnemers in Haarlem, Zandvoort en Amsterdam. Reserveer 's ochtends, ophalen eind van de dag — perfect voor een goedkope lunch of het ontbijt van morgen."],
+    ["Lidl Plus app","Gratis app met wekelijkse digitale kortingsbonnen en spaaracties — activeer de coupons vóór het afrekenen. Lidl zit in Zandvoort en Haarlem/Overveen."],
+    ["Albert Heijn Bonus &amp; gele stickers","AH-app voor de Bonus (ook zonder bonuskaart). Let 's avonds op de 35%-kortingsstickers op vlees, vis en verse producten — ideaal voor de koelbox als je die dag kookt."],
+    ["Statiegeld terughalen","Op vrijwel alle flesjes én blikjes zit €0,15 statiegeld, op grote flessen €0,25. Verzamelen en inleveren bij de supermarkt — over 10 dagen loopt dat op."],
+    ["Kraanwater &amp; eigen lunch","Nederlands kraanwater is prima drinkwater — flessen bijvullen scheelt duur flessenwater. En de eigen lunch meenemen bespaart al gauw €15-25 p.p. per keer."],
+  ],
+  "Gratis &amp; bijna gratis":[
+    ["Gratis GVB-ponten Amsterdam","Achter Amsterdam CS varen gratis ponten naar Noord (NDSM, Buiksloterweg) — meteen een gratis 'rondvaartje' over het IJ."],
+    ["Hofjes, stranden &amp; streetart","Haarlemse hofjes, de stranden (kom met fiets/bus, dan geen parkeergeld), NDSM-streetart en het EYE-waterterras: allemaal gratis."],
+    ["Museumkaart — reken even","Losse musea kosten ± €16-18. Doe je >4 musea per jaar, dan verdient de Museumkaart (± €75/jaar) zich snel terug; anders is los goedkoper."],
+  ],
+  "Outlets &amp; koopjes (met trein of fiets)":[
+    ["Amsterdam The Style Outlets — Halfweg","Sugar City: ~100 merken tot 70% korting (Jack &amp; Jones, New Balance). Station Halfweg-Zwanenburg ligt ernaast — ideale tussenstop richting Amsterdam."],
+    ["Batavia Stad Fashion Outlet — Lelystad","De grootste outlet van de regio: ~150 merken, 30-70% korting (Nike, Adidas, Tommy Hilfiger). Trein Amsterdam CS → Lelystad Centrum (± 40-60 min) + bus 3. Check vooraf de site voor extra acties."],
+    ["Loods 5 Garage — Zaandam","Woon-/interieuroutel (showroommodellen, o.a. HKliving) tegen scherpe prijzen. ± 15-20 min lopen vanaf station Zaandam — leuk met de Zaanse Schans."],
+  ],
+  "Streekwinkels &amp; lokale koopjes (alleen hier)":[
+    ["Berg Vis — Zandvoort","Echte Zandvoortse visboer: verse kibbeling, haring en vis rechtstreeks, goedkoper en verser dan een strandtent. Ook top om vis of gamba's voor de airfryer/gourmet te halen."],
+    ["BioMarkt Kweektuin — Haarlem","Biologische streekmarkt, 1e zaterdag v/d maand (mrt-nov) — dat valt op za 1 aug, jullie kustdag. Vroeg komen."],
+    ["Jopenkerk — Haarlem","Stadsbrouwerij in een oude kerk; eigen bier van het vat, binnen kijken kan gratis, rondleiding met proeverij optioneel. Echte lokale ervaring."],
+    ["Ed Boele kaas &amp; streekproducten","Voor echte Oude Haarlemmer kaas en andere streekkazen — lekker bij het bakkersontbijt. Kaasspeciaalzaak of op de Grote Markt (za) &amp; Botermarkt (wo/vr)."],
+    ["Albert Cuypmarkt — Amsterdam","De bekendste straatmarkt (ma-za ± 9-17u): verse stroopwafels van de plaat, kibbeling, haring, kaas en goedkope lunch."],
+  ],
+};
+
+/* Boodschappen */
+const MARKETS = [
+  ["Weekmarkt Zandvoort","Grote Krocht, elke woensdag 9-16u (29/7 &amp; 5/8). Verse vis, gamba's en groente, ± 3 km fietsen."],
+  ["Botermarkt Haarlem","Woensdag 11-17u en vrijdag 10-16u. Kaas, brood, streekproducten."],
+  ["Grote Markt Haarlem","Maandag 9-16u en zaterdag 8:30-17u. Breed vers aanbod, ook non-food."],
+  ["BioMarkt Kweektuin Haarlem","1e zaterdag v/d maand (za 1/8), biologische streekproducten — vroeg komen."],
+  ["Lidl","Dichtstbijzijnde filialen in Zandvoort en Haarlem/Overveen — check de Lidl-app voor adres en folder-deals."],
+  ["SPAR op de camping","Handig voor kleine aanvullingen, maar duurder dan Lidl of de markt."],
+];
+const SHOPPING = {
+  "Vlees, vis &amp; gevogelte":[
+    ["Kip (dij &amp; filet) — gourmet, souvlaki, fajita, Aziatisch","± 1,5 kg"],
+    ["Verse worstjes / chipolata","6-8 st"],
+    ["Spareribs","1 rek"],
+    ["Kippenvleugels","± 800 g"],
+    ["Biefstuk / runderreepjes (surf &amp; turf + Aziatisch)","± 600 g"],
+    ["Krokante kipschnitzel / -filet (airfryer)","2-4 st"],
+    ["Bacon (ontbijten)","2 pakken"],
+    ["Ham (ontbijt)","1 pakje"],
+    ["Verse witvis / zeebaars — markt (wo)","2 filets"],
+    ["Garnalen &amp; gamba's — deels van de markt","± 650 g"],
+    ["Eieren","± 18 st"],
+  ],
+  "Zuivel &amp; kaas":[
+    ["Griekse yoghurt / kwark","± 1,5 kg"],
+    ["Halloumi","400 g"],
+    ["Feta","1 blok"],
+    ["Mozzarella","1-2 bollen"],
+    ["Geraspte kaas (Tex-Mex)","1 zak"],
+    ["Franse kaas (ontbijt)","1 stuk"],
+    ["Roomboter &amp; kruidenboter","1 pak + 1 rol"],
+    ["Zure room","1 bakje"],
+    ["Tzatziki (of zelf maken)","1 bakje"],
+    ["Melk voor koffie","koop vers bij"],
+  ],
+  "Groente &amp; fruit":[
+    ["Paprika","5-6"],["Courgette","2"],["Champignons","400 g"],["Ui (rode + gewone)","4"],
+    ["Paksoi","1"],["Wortel","3"],["Sperziebonen of broccoli","300 g"],["Krieltjes","500 g"],
+    ["Maïskolven","4"],["Zoete aardappel","2"],["Avocado","4"],["Tomaat &amp; cherrytomaat","ruim"],
+    ["Komkommer","2"],["Sla / salademix","2 zakken"],["Coleslaw (of witte kool + wortel)","1"],
+    ["Basilicum, knoflook &amp; citroen",""],["Vers fruit (bessen, perzik, meloen)","ruim — vers bij"],["Diepvriesfruit (smoothie)","1 zak"],
+  ],
+  "Brood, wraps &amp; granen":[
+    ["Stokbrood","2-3"],["Zuurdesem-/volkorenbrood","2"],["Croissants / pains au chocolat","vers bij"],
+    ["Pita","1 pak"],["Tortilla's / wraps","2 pakken"],["Turks / plat brood","1"],
+    ["Havermout &amp; granola","1 + 1 zak"],["Verse of diepvriesfriet","500 g"],["Rijst (optioneel)","1 pak"],["Pannenkoek-/wafelmix","1 pak"],
+  ],
+  "Sauzen, kruiden &amp; smaakmakers":[
+    ["Knoflooksaus &amp; kruidenboter",""],["Hummus","1-2 bakjes"],["Olijven","1 bak"],["Pesto","1 potje"],
+    ["Ketjap manis, pindasaus, sriracha-mayo",""],["Bbq-saus &amp; bbq-kruiden",""],["Fajita-/tacokruiden","1"],
+    ["Guacamole &amp; salsa","1 + 1"],["Ahornsiroop, honing &amp; jam",""],["Mayo, curry &amp; ketchup",""],
+    ["Chimichurri (of peterselie+knoflook+olie)",""],["Olijfolie, zout &amp; peper","van huis"],
+  ],
+  "Lekkers &amp; borrel (vakantie-extra's)":[
+    ["Chips / borrelnootjes",""],["IJsjes voor in de vriezer",""],["Drankjes naar keuze (bier / wijn / fris)",""],["Koffie","meenemen of vers"],
+  ],
+};
+
+const PACKING = {
+  "Kleding — Imke":[
+    ["T-shirts / topjes","6 st"],["Korte broeken/rokjes","3 st"],["Lange broek of legging","1 — koele avonden &amp; de duinhike"],
+    ["Bikini of badpak","2 st"],["Onderbroeken","8 st"],["BH's, incl. sport-bh","3-4 st"],
+    ["Sokken","8 paar + 2 paar wandelsokken"],["Pyjama","1 set"],["Lichte trui of vest","1-2 — duinavonden koelen af"],
+    ["Regenjas","1 st"],["Dun windjack","1 — 's avonds op het strand"],["Wandelschoenen, ingelopen","1 paar"],
+    ["Sneakers","1 paar — fietsen &amp; stad"],["Slippers/sandalen","1 paar"],["Pet of zonnehoed","1 st"],
+    ["Zonnebril","1 st"],["Sarong of groot strandlaken","1 st"],
+  ],
+  "Kleding — Daan":[
+    ["T-shirts","6 st"],["Korte broeken","3 st"],["Lange broek","1 st"],["Zwembroeken","2 st"],
+    ["Onderbroeken","8 st"],["Sokken","8 paar + 2 wandelsokken"],["Pyjama","1 set"],["Lichte trui of vest","1-2 st"],
+    ["Regenjas","1 st"],["Dun windjack","1 st"],["Wandelschoenen, ingelopen","1 paar"],["Sneakers","1 paar"],
+    ["Slippers/sandalen","1 paar"],["Pet","1 st"],["Zonnebril","1 st"],
+  ],
+  "Tent — Quechua Air Seconds 4.1 F&B (specifiek)":[
+    ["Pomp — NIET meegeleverd!","De Air Seconds heeft opblaasbare bogen i.p.v. stokken, maar de dubbelwerkende handpomp zit er niet bij. Zonder pomp geen tent — check dit als éérste. Bogen tot ± 7 PSI oppompen."],
+    ["Reparatiesetje voor de luchtbogen","Voor het geval een boog lek raakt — een tent zonder werkende boog staat niet. Meestal zit er een setje bij; check of het compleet is."],
+    ["Extra &amp; langere haringen","De rode standaardharingen zijn oké, maar op los duinzand houden lange/brede zandharingen veel beter. Neem een setje extra + een harinkentrekker."],
+    ["Los grondzeil / footprint eronder","Het ingebouwde kuipzeil is waterdicht, maar een los grondzeil eronder beschermt de bodem tegen scherp zand en scheelt vocht van onderaf."],
+    ["Goed ventileren tegen condens","Polyester 'ademt' niet zoals katoen — zet de ventilatiepanelen open (ook 's nachts een kier) zodat er 's ochtends geen condens in de tent hangt."],
+    ["Fresh&Black = donker &amp; koeler","De slaapcabine blokkeert vrijwel al het licht en scheelt ± 5°C bij warm weer — heerlijk uitslapen. Overdag heb je binnen wél een lampje nodig, zo donker is het."],
+    ["Tent goed dróóg opbergen","Bij vertrek nat inpakken = schimmel. Kan het niet droog op de camping, laat 'm thuis meteen uitgevouwen drogen."],
+    ["Steekwagen / bolderkar","De tent weegt ± 15 kg en is log — met een karretje sjouw je 'm veel makkelijker van de auto naar de plek (en de rest van de spullen meteen mee)."],
+    ["Windscherm voor de plek","Geen ingebouwde luifel; een windscherm of tarp geeft luwte en schaduw op de open duinplek."],
+  ],
+  "Slapen &amp; comfort":[
+    ["Luchtbedden of slaapmatjes + slaapzakken",""],
+    ["Kussens",""],
+    ["Tentkleed",""],
+    ["Oplaadbare lamp / lichtslinger",""],
+    ["Oordopjes &amp; slaapmasker","met F&amp;B minder nodig, maar toch fijn"],
+    ["Kampeerstoelen &amp; -tafel",""],
+    ["Klein 12V/USB-ventilatortje","bij een warme nacht goud waard"],
+  ],
+  "Koken — airfryer &amp; gourmetplaat":[
+    ["Airfryer &amp; gourmet-/grillplaat","de twee sterren van het menu"],
+    ["Verlengsnoer (+ stekkerdoos)","de standplaats heeft niet overal stroom dichtbij"],
+    ["Scherp koksmes + snijplank","vlees in reepjes/blokjes snijden voor de gourmet"],
+    ["Keukentang &amp; spatel","voor keren op de plaat en in de airfryer"],
+    ["Aluminiumfolie &amp; bakpapier(vellen airfryer)","tegen uitdrogen en voor makkelijk schoonmaken"],
+    ["Vershouddozen","mealprep-restjes en overnight oats"],
+    ["Afwasmiddel, sponsje, theedoek","niet altijd aanwezig bij het sanitair"],
+    ["Keukenpapier &amp; vuilniszakken","standaard camping-essentials"],
+  ],
+  "Koelbox &amp; vers houden":[
+    ["Grote koelbox (evt. elektrisch)","grootste bottleneck op een camping — voor vlees, vis, zuivel"],
+    ["Koelelementen","minstens 4-6, zodat je kunt wisselen"],
+    ["Kleine koeltas voor dagtochten","zo hoeft de grote koelbox niet steeds open"],
+    ["Thermos-/waterfles","voor de wandelingen en de Amsterdam-dag"],
+  ],
+  "Verzorging &amp; EHBO":[
+    ["Zonnebrand SPF 30/50","groot formaat — 10 dagen strand/wandelen vraagt veel"],
+    ["Aftersun","1 tube"],["Insectenspray &amp; anti-jeukgel","vooral 's avonds in de duinen"],
+    ["Tekenpincet","de duinen staan bekend om teken"],["Pleisters + blarenpleisters","na de lange wandeldag"],
+    ["Klein EHBO-setje","paracetamol/ibuprofen, pleisters, verband"],["Toiletspullen + reishanddoeken","reisformaat, voor het sanitair"],
+    ["Reserve toiletpapier","niet elk sanitairgebouw heeft voorraad"],["Contactlenzen/bril + vloeistof","indien van toepassing"],
+  ],
+  "Handig &amp; documenten":[
+    ["Powerbank + opladers","incl. lader voor de Garmin — handig op de lange dagen"],
+    ["Hoofdlamp of zaklamp","de duinpaden zijn 's avonds pikdonker"],
+    ["ID/paspoort, zorgpas, bankpas + wat contant","niet elke marktkraam pint"],
+    ["Reserveringsbevestiging camping","op papier of telefoon"],
+    ["OV-chip of contactloze pas","voor bus 81, trein en de pont"],
+    ["Boek of leesvoer","voor de rustdagen"],
+    ["Fietstassen / stevige boodschappentas","voor de markt in Zandvoort of Haarlem"],
+  ],
+  "Vooraf inkopen (niet vergeten)":[
+    ["Pomp + reparatieset checken","het allerbelangrijkste voor de tent — test 'm thuis even"],
+    ["Extra zandharingen","voor de losse duinzandbodem"],
+    ["Ketjap, pindasaus, sriracha-mayo","voor de Aziatische gourmet-avond"],
+    ["Bbq-saus &amp; -kruiden, fajita-/tacokruiden","voor bbq en Tex-Mex"],
+    ["Ahornsiroop, knoflooksaus, kruidenboter","voor ontbijt &amp; gourmet"],
+    ["Airfryer-bakpapiervellen","scheelt schoonmaken op de camping"],
+    ["Bevries vooraf een paar flessen water","dienen als koelelement én koud drinkwater als ze smelten"],
+    ["Too Good To Go-app installeren","om onderweg koopjes te scoren"],
+  ],
+};
+
+/* ---------- ROUTES (kaart) ----------
+   Bloemendaal/Zandvoort/Haarlem liggen dicht genoeg bij elkaar dat een
+   vereenvoudigde lijn langs kust/weg een redelijke indicatie geeft; voor
+   de duinpaden zelf (Kennemerduinen, AWD, Amsterdam) is het exacte tracé
+   niet betrouwbaar te reconstrueren zonder een echt GPX-bestand, dus die
+   krijgen een startmarkering + de originele link. Zet je zelf een GPX-
+   bestand in /routes, dan kun je "line" hieronder vervangen door de
+   ingelezen coördinaten. */
+const ROUTES = [
+  { slug:"kennemerduinen-vogelmeer-kraansvlak", name:"Kennemerduinen — Vogelmeer &amp; Kraansvlak", type:"hike", marker:[52.408,4.589], line:null,
+    links:[{label:"AllTrails",url:"https://www.alltrails.com/trail/netherlands/north-holland/ns-wandeling-kennemerduinen"},{label:"Wandelnetwerk Bloemendaal",url:"https://www.wandelnetwerknoordholland.nl/startpunten/routes-vanaf-dit-startpunt/2628"}] },
+  { slug:"koevlak-parnassia", name:"Lange duinhike Koevlak–Parnassia", type:"hike", marker:[52.415,4.596], line:null,
+    links:[{label:"AllTrails Koevlak–Parnassia",url:"https://www.alltrails.com/trail/netherlands/north-holland/kennemerduinen-koevlak-parnassia"}] },
+  { slug:"awd-de-zilk", name:"Amsterdamse Waterleidingduinen — ingang De Zilk", type:"hike", marker:[52.305,4.546], line:null,
+    links:[{label:"Routekaart awd.waternet.nl",url:"http://awd.waternet.nl/"}] },
+  { slug:"strand-bloemendaal-zandvoort", name:"Strandwandeling Bloemendaal–Zandvoort v.v.", type:"hike", marker:null,
+    line:[[52.4025,4.5695],[52.394,4.562],[52.386,4.556],[52.3745,4.5545],[52.3705,4.5535]],
+    links:[] },
+  { slug:"noordvoort-strandpaal-64", name:"Noordvoort &amp; Strandpaal 64", type:"hike", marker:[52.345,4.545], line:null, links:[] },
+  { slug:"hofjeswandeling-haarlem", name:"Hofjeswandeling Haarlem", type:"hike", marker:[52.381,4.637], line:null, links:[] },
+  { slug:"amsterdam-noord", name:"Amsterdam-Noord wandeling", type:"hike", marker:[52.401,4.889], line:null,
+    links:[{label:"I amsterdam",url:"https://www.iamsterdam.com/zien-en-doen/natuur-en-actief/routes/wandelroute-door-ndsm"},{label:"Wikiloc GPX",url:"https://www.wikiloc.com/hiking-trails/verrassend-amsterdam-noord-13667750"}] },
+  { slug:"amsterdam-oost", name:"Amsterdam-Oost, minder standaard", type:"hike", marker:[52.360,4.933], line:null, links:[] },
+  { slug:"duin-haarlem-fiets", name:"Duin naar stad → Haarlem (fiets)", type:"bike", marker:null,
+    line:[[52.4025,4.5730],[52.3975,4.5985],[52.3875,4.6155],[52.3810,4.6360]],
+    links:[] },
+  { slug:"bloemendaal-zandvoort-boulevard-fiets", name:"Bloemendaal → Zandvoort boulevard (fiets)", type:"bike", marker:null,
+    line:[[52.4025,4.5730],[52.395,4.5665],[52.386,4.5615],[52.3745,4.5560]],
+    links:[] },
+  { slug:"buitenplaatsen-tocht", name:"Buitenplaatsen-tocht", type:"bike", marker:[52.462,4.635], line:null, links:[] },
+  { slug:"fort-vijfhuizen", name:"Fort bij Vijfhuizen — Stelling van Amsterdam", type:"bike", marker:[52.348,4.686], line:null, links:[] },
+  { slug:"kraansvlak-stop", name:"Kraansvlak-stop", type:"bike", marker:[52.408,4.589], line:null, links:[] },
+];
+
+/* Optionele upgrade: als er een .gpx-bestand met de bijbehorende "slug"
+   in /routes staat, wordt de indicatieve lijn of startmarkering hierboven
+   vervangen door het echte, ingelezen tracé. Ontbreekt het bestand (het
+   normale geval zolang je zelf niets hebt gedownload), dan gebeurt er
+   stilzwijgend niets en blijft de bestaande weergave staan. */
+function parseGpxLatLngs(gpxText){
+  const doc = new DOMParser().parseFromString(gpxText, "application/xml");
+  if(doc.querySelector("parsererror")) return null;
+  const pts = [...doc.querySelectorAll("trkpt, rtept")].map(pt => [
+    parseFloat(pt.getAttribute("lat")), parseFloat(pt.getAttribute("lon"))
+  ]).filter(([lat,lon]) => Number.isFinite(lat) && Number.isFinite(lon));
+  return pts.length >= 2 ? pts : null;
+}
+async function upgradeRoutesFromGpx(){
+  await Promise.all(ROUTES.map(async (r, i) => {
+    try{
+      const res = await fetch(`routes/${r.slug}.gpx`);
+      if(!res.ok) return;
+      const pts = parseGpxLatLngs(await res.text());
+      if(!pts) return;
+      if(routeLayers[i]) routeMapInstance.removeLayer(routeLayers[i]);
+      routeLayers[i] = L.polyline(pts, { color:'#0F5C56', weight:4, opacity:0.9 })
+        .bindPopup(`<b>${r.name}</b><br>Ingelezen uit eigen GPX-bestand.`)
+        .addTo(routeMapInstance);
+      const row = document.querySelector(`.route-row input[data-idx="${i}"]`)?.closest('.route-row');
+      if(row){
+        const badge = row.querySelector('.badge-line, .badge-link');
+        if(badge){ badge.textContent = 'GPX-track'; badge.className = 'badge-line'; }
+      }
+    }catch(e){ /* geen bestand of netwerk niet beschikbaar — gewoon negeren */ }
+  }));
+}
+
+let routeMapInstance = null;
+let routeLayers = [];
+function toggleRoute(i, checked){
+  const layer = routeLayers[i];
+  if(!layer || !routeMapInstance) return;
+  if(checked) routeMapInstance.addLayer(layer); else routeMapInstance.removeLayer(layer);
+}
+function renderRouteMap(){
+  const rows = ROUTES.map((r,i)=>{
+    const badge = r.line ? `<span class="badge-line">indicatieve lijn</span>` : `<span class="badge-link">alleen link</span>`;
+    const linkList = r.links.map(l=>`<a href="${l.url}" target="_blank" rel="noopener">${l.label}</a>`).join(' · ');
+    const rlink = linkList ? `<span class="rlink">${linkList}</span>` : (!r.line ? `<span class="rlink" style="color:var(--muted)">geen losse route-link — zie de categorie hieronder voor details</span>` : '');
+    return `<div class="route-row">
+      <input type="checkbox" checked data-idx="${i}" onchange="toggleRoute(${i},this.checked)">
+      <div class="rt"><b>${r.name}</b>${badge}${rlink}</div>
+    </div>`;
+  }).join('');
+  document.getElementById('routeMapWrap').innerHTML = `
+    <div class="cat">Kaart — wandel- &amp; fietsroutes</div>
+    <div class="map-wrap">
+      <div class="map-status" id="mapStatus">🔌 geen internet — alleen eerder geladen kaartgebied zichtbaar, geen nieuwe tegels</div>
+      <div id="routeMap"></div>
+    </div>
+    <div class="route-list">${rows}</div>
+    <div class="intro">🟠 oranje lijnen zijn een vereenvoudigde, indicatieve route (geen ingelezen GPX-bestand) — check bij twijfel altijd de link. Routes zonder lijn tonen alleen een startmarkering; open de link voor het volledige, officiële tracé.</div>`;
+
+  routeMapInstance = L.map('routeMap', { scrollWheelZoom:false }).setView([52.398,4.60], 11);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom:18,
+    attribution:'&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a>-bijdragers'
+  }).addTo(routeMapInstance);
+
+  routeLayers = ROUTES.map(r=>{
+    if(r.line){
+      return L.polyline(r.line, { color:'#FF6B4A', weight:4, opacity:0.85 })
+        .bindPopup(`<b>${r.name}</b><br>Indicatieve, vereenvoudigde route — geen officieel GPX-bestand.`)
+        .addTo(routeMapInstance);
+    }
+    const popupLinks = r.links.length ? '<br>' + r.links.map(l=>`<a href="${l.url}" target="_blank" rel="noopener">${l.label}</a>`).join('<br>') : '';
+    return L.marker(r.marker).bindPopup(`<b>${r.name}</b>${popupLinks}`).addTo(routeMapInstance);
+  });
+
+  const mapStatus = document.getElementById('mapStatus');
+  function updateMapStatus(){ mapStatus.classList.toggle('show', !navigator.onLine); }
+  updateMapStatus();
+  window.addEventListener('online', updateMapStatus);
+  window.addEventListener('offline', updateMapStatus);
+  routeMapInstance.on('tileerror', ()=>{ if(!navigator.onLine) mapStatus.classList.add('show'); });
+
+  upgradeRoutesFromGpx();
+}
+
+/* ---------- ZON OP/ONDER (lokale berekening, geen API nodig) ----------
+   Compacte implementatie van de bekende NOAA-zonformule (zoals ook in
+   SunCalc gebruikt wordt) — volledig offline, alleen datum + coördinaten
+   nodig. Geverifieerd tegen bekende zonstanden voor Nederland eind juli/
+   begin augustus. */
+const CAMP_LAT = 52.401, CAMP_LON = 4.582;
+(function(){
+  const rad = Math.PI/180, dayMs = 864e5, J1970 = 2440588, J2000 = 2451545, e = rad*23.4397;
+  const toJulian = date => date.valueOf()/dayMs - 0.5 + J1970;
+  const fromJulian = j => new Date((j + 0.5 - J1970) * dayMs);
+  const toDays = date => toJulian(date) - J2000;
+  const solarMeanAnomaly = d => rad*(357.5291 + 0.98560028*d);
+  const eclipticLongitude = M => M + rad*(1.9148*Math.sin(M)+0.02*Math.sin(2*M)+0.0003*Math.sin(3*M)) + rad*102.9372 + Math.PI;
+  const declination = l => Math.asin(Math.sin(e)*Math.sin(l));
+  const julianCycle = (d,lw) => Math.round(d - 0.0009 - lw/(2*Math.PI));
+  const approxTransit = (Ht,lw,n) => 0.0009 + (Ht+lw)/(2*Math.PI) + n;
+  const solarTransitJ = (ds,M,L) => J2000 + ds + 0.0053*Math.sin(M) - 0.0069*Math.sin(2*L);
+  const hourAngle = (h,phi,d) => Math.acos((Math.sin(h)-Math.sin(phi)*Math.sin(d))/(Math.cos(phi)*Math.cos(d)));
+  window.solarTimes = function(date, lat, lng){
+    const lw = rad*-lng, phi = rad*lat, d = toDays(date);
+    const n = julianCycle(d,lw), ds = approxTransit(0,lw,n);
+    const M = solarMeanAnomaly(ds), L = eclipticLongitude(M), dec = declination(L);
+    const Jnoon = solarTransitJ(ds,M,L);
+    const w = hourAngle(-0.833*rad, phi, dec);
+    const Jset = solarTransitJ(approxTransit(w,lw,n), M, L);
+    const Jrise = Jnoon - (Jset - Jnoon);
+    return { sunrise: fromJulian(Jrise), sunset: fromJulian(Jset) };
+  };
+})();
+function sunTimesFor(dateStr){
+  const t = window.solarTimes(new Date(dateStr+"T12:00:00Z"), CAMP_LAT, CAMP_LON);
+  const fmt = dt => dt.toLocaleTimeString('nl-NL',{timeZone:'Europe/Amsterdam',hour:'2-digit',minute:'2-digit'});
+  return { sunrise: fmt(t.sunrise), sunset: fmt(t.sunset) };
+}
+
+/* ---------- LIVE WEER (Open-Meteo, geen API-key) ---------- */
+const VACATION_START = "2026-07-28", VACATION_END = "2026-08-06";
+const VACATION_DAYS = (function(){
+  const days=[]; const d=new Date(VACATION_START+"T12:00:00"); const end=new Date(VACATION_END+"T12:00:00");
+  while(d<=end){ days.push(d.toISOString().slice(0,10)); d.setDate(d.getDate()+1); }
+  return days;
+})();
+const WX_CACHE_KEY = "duinvakantie-weer-v1";
+const WX_CODES = {0:'☀️ Helder',1:'🌤️ Overwegend zonnig',2:'⛅ Half bewolkt',3:'☁️ Bewolkt',45:'🌫️ Mist',48:'🌫️ Mist',51:'🌦️ Motregen',53:'🌦️ Motregen',55:'🌦️ Motregen',56:'🌧️ IJzel-motregen',57:'🌧️ IJzel-motregen',61:'🌧️ Regen',63:'🌧️ Regen',65:'🌧️ Regen',66:'🌧️ IJzelregen',67:'🌧️ IJzelregen',71:'🌨️ Sneeuw',73:'🌨️ Sneeuw',75:'🌨️ Sneeuw',77:'🌨️ Sneeuwkorrels',80:'🌦️ Buien',81:'🌦️ Buien',82:'🌧️ Zware buien',85:'🌨️ Sneeuwbuien',86:'🌨️ Sneeuwbuien',95:'⛈️ Onweer',96:'⛈️ Onweer + hagel',99:'⛈️ Onweer + hagel'};
+function wxLabel(code){ return WX_CODES[code] || '🌡️ Onbekend'; }
+function beaufort(kmh){ const t=[1,6,12,20,29,39,50,62,75,89,103,118]; for(let b=0;b<t.length;b++){ if(kmh<t[b]) return b; } return 12; }
+async function fetchWeather(){
+  const url = `https://api.open-meteo.com/v1/forecast?latitude=${CAMP_LAT}&longitude=${CAMP_LON}&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max,wind_speed_10m_max&timezone=Europe%2FAmsterdam&forecast_days=16`;
+  const res = await fetch(url);
+  if(!res.ok) throw new Error('weer-ophalen mislukt');
+  const data = await res.json();
+  const daily = data.daily;
+  const codes = daily.weather_code || daily.weathercode;
+  const wind = daily.wind_speed_10m_max || daily.windspeed_10m_max;
+  const days = {};
+  daily.time.forEach((date,i)=>{
+    days[date] = { code:codes[i], tmax:Math.round(daily.temperature_2m_max[i]), tmin:Math.round(daily.temperature_2m_min[i]), precip:daily.precipitation_probability_max[i], wind:Math.round(wind[i]) };
+  });
+  const payload = { fetchedAt: Date.now(), days };
+  try{ localStorage.setItem(WX_CACHE_KEY, JSON.stringify(payload)); }catch(e){}
+  return payload;
+}
+function loadCachedWeather(){ try{ const r=localStorage.getItem(WX_CACHE_KEY); return r?JSON.parse(r):null; }catch(e){ return null; } }
+function timeAgo(ts){
+  const min = Math.round((Date.now()-ts)/60000);
+  if(min<1) return 'zojuist';
+  if(min<60) return `${min} min geleden`;
+  const h = Math.round(min/60);
+  if(h<24) return `${h} uur geleden`;
+  return `${Math.round(h/24)} dag(en) geleden`;
+}
+async function renderDayOverview(){
+  const el = document.getElementById('dayOverview');
+  let wx = null, status = 'none';
+  try{ wx = await fetchWeather(); status = 'ok'; }
+  catch(e){ const cached = loadCachedWeather(); if(cached){ wx = cached; status = 'cached'; } }
+
+  const cards = VACATION_DAYS.map(dateStr=>{
+    const d = new Date(dateStr+'T12:00:00');
+    const dd = d.toLocaleDateString('nl-NL',{weekday:'short'});
+    const dnum = d.toLocaleDateString('nl-NL',{day:'2-digit',month:'2-digit'});
+    const sun = sunTimesFor(dateStr);
+    const dayWx = wx && wx.days ? wx.days[dateStr] : null;
+    let wxHtml;
+    if(dayWx){
+      wxHtml = `<div class="wx">${wxLabel(dayWx.code)}</div>
+        <div class="meta"><span class="t">${dayWx.tmin}° – ${dayWx.tmax}°C</span><span>☔ ${dayWx.precip}% neerslagkans</span><span>💨 wind ${beaufort(dayWx.wind)} Bft</span></div>`;
+    } else if(status==='none'){
+      wxHtml = `<div class="wx" style="color:var(--muted)">geen verbinding — nog geen data</div>`;
+    } else {
+      wxHtml = `<div class="wx" style="color:var(--muted)">nog geen voorspelling (te ver vooruit)</div>`;
+    }
+    return `<div class="day-card">
+      <div class="dd">${dd}</div>
+      <div class="dnum">${dnum}</div>
+      ${wxHtml}
+      <div class="sun"><span>🌅 op ${sun.sunrise}</span><span>🌇 onder ${sun.sunset}</span></div>
+      <div class="tide">🌊 Getij: check <a href="https://waterinfo.rws.nl/" target="_blank" rel="noopener">Rijkswaterstaat Waterinfo</a> (zoek Zandvoort/IJmuiden) of de reddingsbrigade op het strand voor de actuele tafel.</div>
+    </div>`;
+  }).join('');
+
+  const statusLine = status==='ok'
+    ? `<div class="weather-status">Weer via Open-Meteo · bijgewerkt ${timeAgo(wx.fetchedAt)}</div>`
+    : status==='cached'
+      ? `<div class="weather-status offline">📴 Geen actuele verbinding — laatst bekende weerdata van ${timeAgo(wx.fetchedAt)}</div>`
+      : `<div class="weather-status offline">📴 Geen verbinding en nog geen eerdere weerdata opgeslagen.</div>`;
+
+  el.innerHTML = `<div class="cat">Dagoverzicht — weer, zon &amp; getij</div>${statusLine}<div class="day-strip">${cards}</div>`;
+}
+
+/* ---------- COUNTDOWN ---------- */
+function renderCountdown(){
+  const start = new Date("2026-07-28T00:00:00+02:00");
+  const end = new Date("2026-08-06T23:59:59+02:00");
+  const now = new Date();
+  const el = document.getElementById("cdText");
+  if(!el) return;
+  const d = 86400000;
+  if(now < start){ const n = Math.ceil((start-now)/d); el.innerHTML = `🌊 nog <b>${n}</b> ${n===1?"dag":"dagen"} tot vertrek`; }
+  else if(now <= end){ const n = Math.floor((now-start)/d)+1; el.innerHTML = `🏖️ dag <b>${n}</b> van 10 · geniet ervan!`; }
+  else { el.innerHTML = `tot de volgende keer ♥`; }
+}
+
+/* ---------- GENERIEKE LIJST ---------- */
+function listHtml(obj){
+  let html = "";
+  for(const [cat, items] of Object.entries(obj)){
+    const rows = items.map(([name, why])=>`<div class="row"><b>${name}</b>${why?` — ${why}`:""}</div>`).join("");
+    html += `<div class="cat">${cat}</div><div class="card">${rows}</div>`;
+  }
+  return html;
+}
+
+function renderAct(){
+  const strip = `<div class="photo-strip">
+      <figure class="pf">
+        <svg viewBox="0 0 200 110" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Kennemerduinen">
+          <rect width="200" height="110" fill="#FDF6E8"/>
+          <path d="M0,70 Q50,45 100,62 T200,55 L200,110 L0,110 Z" fill="#FFB238" opacity="0.5"/>
+          <path d="M0,85 Q60,60 120,80 T200,75 L200,110 L0,110 Z" fill="#FBEBC9" opacity="0.9"/>
+          <path d="M0,95 Q70,78 140,92 T200,88 L200,110 L0,110 Z" fill="#E8B860"/>
+          <circle cx="165" cy="25" r="14" fill="#FFCC4D"/>
+          <path d="M30,95 Q34,80 38,95 Z" fill="#1FA398"/>
+          <path d="M40,95 Q43,86 46,95 Z" fill="#1FA398"/>
+        </svg>
+        <figcaption>Kennemerduinen</figcaption>
+      </figure>
+      <figure class="pf">
+        <svg viewBox="0 0 200 110" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Haarlem">
+          <rect width="200" height="110" fill="#D9F2EF"/>
+          <rect x="0" y="70" width="200" height="40" fill="#0F5C56"/>
+          <rect x="20" y="45" width="28" height="65" fill="#1FA398"/>
+          <rect x="55" y="55" width="24" height="55" fill="#2FB8C4"/>
+          <polygon points="95,55 110,20 125,55" fill="#1FA398"/>
+          <rect x="99" y="55" width="22" height="55" fill="#1FA398"/>
+          <rect x="106" y="30" width="8" height="16" fill="#1FA398"/>
+          <rect x="132" y="50" width="26" height="60" fill="#2FB8C4"/>
+          <rect x="165" y="60" width="24" height="50" fill="#1FA398"/>
+          <circle cx="108" cy="18" r="3" fill="#FF6B4A"/>
+        </svg>
+        <figcaption>Haarlem</figcaption>
+      </figure>
+      <figure class="pf">
+        <svg viewBox="0 0 200 110" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Amsterdam Noord">
+          <rect width="200" height="110" fill="#FBEBC9"/>
+          <rect x="0" y="80" width="200" height="30" fill="#0F5C56"/>
+          <rect x="15" y="55" width="50" height="30" fill="#FF6B4A" opacity="0.85"/>
+          <rect x="70" y="60" width="45" height="25" fill="#FFCC4D" opacity="0.85"/>
+          <rect x="120" y="50" width="35" height="35" fill="#1FA398"/>
+          <line x1="165" y1="85" x2="165" y2="25" stroke="#0F5C56" stroke-width="3"/>
+          <line x1="165" y1="30" x2="190" y2="45" stroke="#0F5C56" stroke-width="3"/>
+          <line x1="165" y1="30" x2="140" y2="40" stroke="#0F5C56" stroke-width="3"/>
+        </svg>
+        <figcaption>Amsterdam Noord</figcaption>
+      </figure>
+    </div>`;
+  const intro = `<div class="intro">Alle ideeën los, per categorie — pak er 's ochtends uit wat bij het weer en jullie zin past. Geen vast schema.</div>`;
+  document.getElementById("actWrap").innerHTML = strip + intro +
+    `<div id="dayOverview"></div><div id="routeMapWrap"></div>` +
+    listHtml(ACTIVITIES) +
+    `<div class="credits">Illustraties: eigen SVG's, geen externe afbeeldingen nodig. Kaart © OpenStreetMap-bijdragers. Weer via Open-Meteo.</div>`;
+  renderDayOverview();
+  renderRouteMap();
+}
+
+function renderEten(){
+  const banner = `<div class="banner" style="background:linear-gradient(135deg,#1FA398,#0F5C56);display:flex;align-items:flex-end;">
+    <svg viewBox="0 0 800 150" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg" style="position:absolute;inset:0;width:100%;height:100%;">
+      <path d="M0,110 Q120,80 260,102 T520,90 T800,100 L800,150 L0,150 Z" fill="#FBEBC9" opacity="0.35"/>
+      <path d="M0,125 Q140,150 300,120 T650,120 T800,115 L800,150 L0,150 Z" fill="#FFB238" opacity="0.3"/>
+    </svg>
+    <div class="cap" style="position:relative;">Elke dag iets lekkers 🍽️</div>
+  </div>`;
+  const intro = `<div class="intro">Losse eet-ideeën rond de <b>airfryer</b> en <b>gourmetplaat</b> — geen calorieën tellen, gewoon kiezen waar je die dag zin in hebt. Verse vis, gamba's en fruit haal je onderweg vers op de markt of bij Berg Vis.</div>`;
+  document.getElementById("etenWrap").innerHTML = banner + intro + listHtml(ETEN);
+}
+
+function renderCoffee(){
+  const intro = `<div class="intro">Betaalbare, lokale koffie- en lunchplekken met normale prijzen of een ochtenddeal — geen €6-matchatenten.</div>`;
+  document.getElementById("coffeeWrap").innerHTML = intro + listHtml(COFFEE);
+}
+
+function renderDeals(){
+  const budget = `<div class="budget-box"><h3>💶 Budget in het kort</h3>
+    <div class="bl"><span>Boodschappen (2 pers, 10 dagen)</span><span class="a">€230–300</span></div>
+    <div class="bl"><span>Dagelijkse extra's (koffie, entree, vervoer)</span><span class="a">± €190</span></div>
+    <div class="bl grand"><span>Samen, excl. camping</span><span class="a">± €420–490</span></div>
+  </div>
+  <div class="intro">Ruwe schatting, niet om op de cent te sturen. Camping en optionele extra's (festivaltickets, museum) staan er los van. De meeste maaltijden koken jullie zelf, dus de dagelijkse kosten blijven laag.</div>`;
+  document.getElementById("dealsWrap").innerHTML = budget + listHtml(DEALS);
+}
+
+function renderShop(){
+  let markets = MARKETS.map(([n,w])=>`<div class="row"><b>${n}</b> — ${w}</div>`).join("");
+  let cats = "";
+  for(const [cat, items] of Object.entries(SHOPPING)){
+    const rows = items.map(([name, qty])=>`<div class="row two"><span>${name}</span>${qty?`<span class="qty">${qty}</span>`:""}</div>`).join("");
+    cats += `<div class="cat">${cat}</div><div class="card">${rows}</div>`;
+  }
+  document.getElementById("shopWrap").innerHTML =
+    `<div class="intro">Losjes samengesteld uit het vakantiemenu — hoeveelheden zijn een richtlijn. Koop verse dingen (vis, gamba's, fruit, brood) gaandeweg vers bij i.p.v. alles in één keer.</div>` +
+    `<div class="cat">Markten &amp; supermarkten</div><div class="card">${markets}</div>` +
+    cats;
+}
+
+/* ---------- PACKING (localStorage) ---------- */
+const PACK_KEY = "duinvakantie-paklijst-2026-v3";
+let packState = null;
+function defaultPack(){ const s={}; for(const [c,items] of Object.entries(PACKING)) s[c]=items.map(([t,w])=>({text:t,note:w,checked:false})); return s; }
+function loadPack(){ if(packState) return packState; try{ const r=localStorage.getItem(PACK_KEY); packState=r?JSON.parse(r):defaultPack(); }catch(e){ packState=defaultPack(); } return packState; }
+function savePack(){ try{ localStorage.setItem(PACK_KEY, JSON.stringify(packState)); }catch(e){} }
+function packProgress(){ let t=0,d=0; for(const it of Object.values(packState)){ t+=it.length; d+=it.filter(i=>i.checked).length; } return {d,t,pct:t?Math.round(d/t*100):0}; }
+function renderPack(){
+  loadPack();
+  let html="";
+  for(const [cat, items] of Object.entries(packState)){
+    const rows = items.map((item,idx)=>`
+      <div class="check-row ${item.checked?'checked':''}">
+        <input type="checkbox" ${item.checked?'checked':''} onchange="togglePack('${cat.replace(/'/g,"\\'")}',${idx})">
+        <div class="check-text"><b>${item.text}</b>${item.note?' — '+item.note:''}</div>
+        <button class="del-btn" onclick="delPack('${cat.replace(/'/g,"\\'")}',${idx})" title="Verwijderen">✕</button>
+      </div>`).join("");
+    const id='add-'+cat.replace(/[^a-zA-Z0-9]/g,'');
+    html += `<div class="cat">${cat}</div><div class="card">${rows}
+      <div class="add-row"><input type="text" placeholder="Zelf item toevoegen..." id="${id}" onkeydown="if(event.key==='Enter')addPack('${cat.replace(/'/g,"\\'")}','${id}')">
+      <button onclick="addPack('${cat.replace(/'/g,"\\'")}','${id}')">+ Toevoegen</button></div></div>`;
+  }
+  const p=packProgress();
+  document.getElementById("packWrap").innerHTML=`
+    <div class="intro">Vink af wat is ingepakt, of pas de lijst zelf aan — dit blijft bewaard in je browser. De tent-hacks zijn afgestemd op jullie Quechua Air Seconds 4.1 F&B.</div>
+    <div class="pack-top"><span class="progress-pill">${p.d}/${p.t} · ${p.pct}%</span><button class="reset-btn" onclick="resetPack()">Reset lijst</button></div>
+    <div class="progressbar"><span style="width:${p.pct}%"></span></div>${html}`;
+}
+function togglePack(c,i){ packState[c][i].checked=!packState[c][i].checked; savePack(); renderPack(); }
+function delPack(c,i){ packState[c].splice(i,1); savePack(); renderPack(); }
+function addPack(c,id){ const el=document.getElementById(id); const v=el.value.trim(); if(!v)return; packState[c].push({text:v,note:"",checked:false}); savePack(); renderPack(); }
+function resetPack(){ if(!confirm("Paklijst terugzetten naar standaard? Je eigen vinkjes en toevoegingen gaan verloren.")) return; packState=defaultPack(); savePack(); renderPack(); }
+
+/* ---------- VERRAS ME ---------- */
+function pickRandom(obj){
+  const cats = Object.keys(obj);
+  const cat = cats[Math.floor(Math.random()*cats.length)];
+  const items = obj[cat];
+  const item = items[Math.floor(Math.random()*items.length)];
+  return {cat, name:item[0], why:item[1]};
+}
+function surpriseMe(){
+  const a = pickRandom(ACTIVITIES);
+  const e = pickRandom(ETEN);
+  document.getElementById("surpriseContent").innerHTML = `
+    <div class="surprise-pick"><span class="tag">${a.cat}</span><b>${a.name}</b>${a.why?` — ${a.why}`:""}</div>
+    <div class="surprise-pick"><span class="tag">${e.cat}</span><b>${e.name}</b>${e.why?` — ${e.why}`:""}</div>
+  `;
+  document.getElementById("surpriseOverlay").classList.add("open");
+}
+function closeSurprise(){ document.getElementById("surpriseOverlay").classList.remove("open"); }
+document.getElementById("surpriseBtn").onclick = surpriseMe;
+
+/* ---------- THEME ---------- */
+const THEME_KEY="duinvakantie-theme";
+function applyTheme(t){ document.documentElement.setAttribute("data-theme",t); document.getElementById("themeToggle").textContent = t==="dark"?"☀️":"🌙"; }
+(function(){ let t="light"; try{ t=localStorage.getItem(THEME_KEY)||"light"; }catch(e){} applyTheme(t); })();
+document.getElementById("themeToggle").onclick=()=>{ const c=document.documentElement.getAttribute("data-theme"); const n=c==="dark"?"light":"dark"; applyTheme(n); try{localStorage.setItem(THEME_KEY,n);}catch(e){} };
+
+/* ---------- DELEN ---------- */
+document.getElementById("shareBtn").onclick=async()=>{
+  const msg="Onze duinvakantie-planner (28 juli–6 aug, De Lakens): losse ideeën voor activiteiten, eten, koffie, koopjes, boodschappen en inpakken. Open het HTML-bestand in je browser — je eigen paklijst-vinkjes blijven apart bewaard. 🏖️";
+  try{ if(navigator.share){ await navigator.share({title:"Duinvakantie-planner", text:msg}); return; } }catch(e){}
+  try{ await navigator.clipboard.writeText(msg); alert("Berichtje voor Daan gekopieerd! ✅\n\nPlak het in WhatsApp en stuur dit HTML-bestand mee — dan opent Daan zijn eigen kopie."); }
+  catch(e){ alert("Deel de planner met Daan door dit HTML-bestand te sturen (WhatsApp, mail of AirDrop). Hij opent het in zijn browser."); }
+};
+
+/* ---------- SECTIES ---------- */
+const RENDERED = {};
+function show(s){
+  document.querySelectorAll(".tab").forEach(b=>b.classList.toggle("active", b.dataset.target===s));
+  const map={act:"actWrap",eten:"etenWrap",coffee:"coffeeWrap",deals:"dealsWrap",shop:"shopWrap",pack:"packWrap"};
+  for(const [k,id] of Object.entries(map)) document.getElementById(id).style.display = (k===s)?"block":"none";
+  if(!RENDERED[s]){
+    ({act:renderAct,eten:renderEten,coffee:renderCoffee,deals:renderDeals,shop:renderShop,pack:renderPack}[s])();
+    if(s!=="pack") RENDERED[s]=true; // pack altijd herrenderen voor voortgang
+  } else if(s==="pack"){ renderPack(); }
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+document.querySelectorAll(".tab").forEach(b=>{ b.onclick=()=>show(b.dataset.target); });
+
+/* ---------- INIT ---------- */
+renderCountdown();
+renderAct();
+RENDERED.act = true;
+
+/* ---------- SERVICE WORKER (offline/PWA) ---------- */
+if("serviceWorker" in navigator){
+  window.addEventListener("load", ()=>{ navigator.serviceWorker.register("sw.js").catch(()=>{}); });
+}
+</script>
+</body>
+</html>

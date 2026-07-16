@@ -1,0 +1,19 @@
+{
+  "name": "Duinvakantie Bloemendaal 2026",
+  "short_name": "Duinvakantie",
+  "description": "Vakantieplanner voor De Lakens, Bloemendaal aan Zee — 28 juli t/m 6 augustus 2026",
+  "start_url": "./index.html",
+  "scope": "./",
+  "id": "/duinvakantie-bloemendaal",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#FDF6E8",
+  "theme_color": "#0F5C56",
+  "lang": "nl",
+  "dir": "ltr",
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
