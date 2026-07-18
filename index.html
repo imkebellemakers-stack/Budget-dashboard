@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#0F5C56">
+<meta name="theme-color" content="#2F4A3E">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Duinvakantie">
@@ -17,42 +17,42 @@
 <link rel="stylesheet" href="vendor/leaflet/leaflet.css">
 <style>
   :root{
-    --bg:#FDF6E8;
-    --surface:#FFFFFF;
-    --surface-2:#FBEBC9;
-    --ink:#0F5C56;
-    --text:#1B4B48;
-    --muted:#8A7F6E;
-    --strike:#B4AA98;
-    --accent:#FF6B4A;
-    --accent-soft:#FFE1D6;
-    --sage:#1FA398;
-    --sage-soft:#D9F2EF;
-    --gold:#FFB238;
-    --line:#F4DFAE;
-    --header-text:#FFF6EA;
-    --shadow:0 10px 30px -14px rgba(15,92,86,0.28);
-    --shadow-sm:0 3px 12px -6px rgba(15,92,86,0.22);
-    --del:#b98a6f;
+    --bg:#F2EEE1;
+    --surface:#FBFAF5;
+    --surface-2:#E8E1CC;
+    --ink:#2F4A3E;
+    --text:#3C5347;
+    --muted:#867D6C;
+    --strike:#B3AA97;
+    --accent:#5F7F4E;
+    --accent-soft:#E3E9D8;
+    --sage:#4C8577;
+    --sage-soft:#DCEAE4;
+    --gold:#C1984C;
+    --line:#E1D6B9;
+    --header-text:#FAF6EA;
+    --shadow:0 10px 30px -14px rgba(47,74,62,0.28);
+    --shadow-sm:0 3px 12px -6px rgba(47,74,62,0.22);
+    --del:#A38468;
   }
   html[data-theme="dark"]{
-    --bg:#15181F;
-    --surface:#1E222D;
-    --surface-2:#252A37;
-    --ink:#EEF0F6;
-    --text:#DFE3EC;
-    --muted:#9AA0AF;
-    --strike:#6C7280;
-    --accent:#EC855F;
-    --accent-soft:#33241C;
-    --sage:#5EBBA6;
-    --sage-soft:#14302B;
-    --gold:#E6B657;
-    --line:#2D3340;
-    --header-text:#F3EEE4;
+    --bg:#171C18;
+    --surface:#1F251F;
+    --surface-2:#262E26;
+    --ink:#DCE6DB;
+    --text:#C7D1C6;
+    --muted:#8D9A89;
+    --strike:#5B6759;
+    --accent:#8FB07A;
+    --accent-soft:#263323;
+    --sage:#5CA391;
+    --sage-soft:#1A2E29;
+    --gold:#C7A667;
+    --line:#2B332B;
+    --header-text:#EDE8DB;
     --shadow:0 12px 32px -14px rgba(0,0,0,0.6);
     --shadow-sm:0 4px 14px -7px rgba(0,0,0,0.55);
-    --del:#c9a084;
+    --del:#B49478;
   }
   *{box-sizing:border-box;}
   body{
@@ -70,7 +70,7 @@
   .mono{font-family:'DM Mono',monospace;}
 
   /* ---- HERO ---- */
-  header.hero{position:relative;min-height:340px;display:flex;overflow:hidden;background:linear-gradient(160deg,#0F5C56,#0A3E3A);}
+  header.hero{position:relative;min-height:340px;display:flex;overflow:hidden;background:linear-gradient(160deg,#2F4A3E,#182A21);}
   .hero-fallback{position:absolute;inset:0;z-index:0;}
   .hero-fallback svg{width:100%;height:100%;display:block;}
   .hero-bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;z-index:1;}
@@ -118,8 +118,8 @@
   .banner img{width:100%;height:100%;object-fit:cover;display:block;}
   .banner .cap{position:absolute;left:0;right:0;bottom:0;background:linear-gradient(transparent,rgba(15,18,26,0.72));color:#fff;font-family:'Fraunces',serif;font-weight:600;font-size:16px;padding:26px 16px 13px;}
 
-  .photo-strip{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-bottom:6px;}
-  .pf{margin:0;position:relative;height:118px;border-radius:14px;overflow:hidden;background:linear-gradient(135deg,var(--sage),var(--ink));box-shadow:var(--shadow-sm);}
+  .photo-strip{display:grid;grid-template-columns:1fr;gap:9px;margin-bottom:6px;}
+  .pf{margin:0;position:relative;height:140px;border-radius:14px;overflow:hidden;background:linear-gradient(135deg,var(--sage),var(--ink));box-shadow:var(--shadow-sm);}
   .pf img{width:100%;height:100%;object-fit:cover;display:block;}
   .pf figcaption{position:absolute;left:0;right:0;bottom:0;background:linear-gradient(transparent,rgba(0,0,0,0.6));color:#fff;font-family:'DM Mono',monospace;font-size:10.5px;padding:16px 9px 7px;}
 
@@ -213,13 +213,13 @@
   <div class="hero-fallback" aria-hidden="true">
     <svg viewBox="0 0 800 340" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
       <defs>
-        <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#FFE9C2"/><stop offset="55%" stop-color="#FFC98A"/><stop offset="100%" stop-color="#2FB8C4"/></linearGradient>
+        <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#F3E4C4"/><stop offset="55%" stop-color="#E3B98C"/><stop offset="100%" stop-color="#4C8577"/></linearGradient>
       </defs>
       <rect width="800" height="340" fill="url(#sky)"/>
-      <circle cx="610" cy="110" r="52" fill="#FFD97D" opacity="0.9"/>
-      <path d="M0,225 Q150,270 320,232 T660,232 T800,226 L800,340 L0,340 Z" fill="#0F5C56" opacity="0.30"/>
-      <path d="M0,255 Q120,228 240,246 T500,240 T800,248 L800,340 L0,340 Z" fill="#1FA398"/>
-      <path d="M0,285 Q100,262 220,278 T460,272 T800,280 L800,340 L0,340 Z" fill="#0F5C56"/>
+      <circle cx="610" cy="110" r="52" fill="#D9B26B" opacity="0.9"/>
+      <path d="M0,225 Q150,270 320,232 T660,232 T800,226 L800,340 L0,340 Z" fill="#2F4A3E" opacity="0.30"/>
+      <path d="M0,255 Q120,228 240,246 T500,240 T800,248 L800,340 L0,340 Z" fill="#4C8577"/>
+      <path d="M0,285 Q100,262 220,278 T460,272 T800,280 L800,340 L0,340 Z" fill="#2F4A3E"/>
     </svg>
   </div>
   <div class="hero-scrim"></div>
@@ -715,7 +715,7 @@ async function upgradeRoutesFromGpx(){
       const pts = parseGpxLatLngs(await res.text());
       if(!pts) return;
       if(routeLayers[i]) routeMapInstance.removeLayer(routeLayers[i]);
-      routeLayers[i] = L.polyline(pts, { color:'#0F5C56', weight:4, opacity:0.9 })
+      routeLayers[i] = L.polyline(pts, { color:'#2F4A3E', weight:4, opacity:0.9 })
         .bindPopup(`<b>${r.name}</b><br>Ingelezen uit eigen GPX-bestand.`)
         .addTo(routeMapInstance);
       const row = document.querySelector(`.route-row input[data-idx="${i}"]`)?.closest('.route-row');
@@ -751,7 +751,7 @@ function renderRouteMap(){
       <div id="routeMap"></div>
     </div>
     <div class="route-list">${rows}</div>
-    <div class="intro">🟠 oranje lijnen zijn een vereenvoudigde, indicatieve route (geen ingelezen GPX-bestand) — check bij twijfel altijd de link. Routes zonder lijn tonen alleen een startmarkering; open de link voor het volledige, officiële tracé.</div>`;
+    <div class="intro">🟡 goudkleurige lijnen zijn een vereenvoudigde, indicatieve route (geen ingelezen GPX-bestand) — check bij twijfel altijd de link. Donkergroene lijnen zijn een echt ingelezen GPX-track. Routes zonder lijn tonen alleen een startmarkering; open de link voor het volledige, officiële tracé.</div>`;
 
   routeMapInstance = L.map('routeMap', { scrollWheelZoom:false }).setView([52.398,4.60], 11);
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -761,7 +761,7 @@ function renderRouteMap(){
 
   routeLayers = ROUTES.map(r=>{
     if(r.line){
-      return L.polyline(r.line, { color:'#FF6B4A', weight:4, opacity:0.85 })
+      return L.polyline(r.line, { color:'#C1984C', weight:4, opacity:0.85 })
         .bindPopup(`<b>${r.name}</b><br>Indicatieve, vereenvoudigde route — geen officieel GPX-bestand.`)
         .addTo(routeMapInstance);
     }
@@ -916,43 +916,15 @@ function renderAct(){
   const strip = `<div class="photo-strip">
       <figure class="pf">
         <svg viewBox="0 0 200 110" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Kennemerduinen">
-          <rect width="200" height="110" fill="#FDF6E8"/>
-          <path d="M0,70 Q50,45 100,62 T200,55 L200,110 L0,110 Z" fill="#FFB238" opacity="0.5"/>
-          <path d="M0,85 Q60,60 120,80 T200,75 L200,110 L0,110 Z" fill="#FBEBC9" opacity="0.9"/>
-          <path d="M0,95 Q70,78 140,92 T200,88 L200,110 L0,110 Z" fill="#E8B860"/>
-          <circle cx="165" cy="25" r="14" fill="#FFCC4D"/>
-          <path d="M30,95 Q34,80 38,95 Z" fill="#1FA398"/>
-          <path d="M40,95 Q43,86 46,95 Z" fill="#1FA398"/>
+          <rect width="200" height="110" fill="#F2EEE1"/>
+          <path d="M0,70 Q50,45 100,62 T200,55 L200,110 L0,110 Z" fill="#C1984C" opacity="0.5"/>
+          <path d="M0,85 Q60,60 120,80 T200,75 L200,110 L0,110 Z" fill="#E8E1CC" opacity="0.9"/>
+          <path d="M0,95 Q70,78 140,92 T200,88 L200,110 L0,110 Z" fill="#D2B383"/>
+          <circle cx="165" cy="25" r="14" fill="#D9B26B"/>
+          <path d="M30,95 Q34,80 38,95 Z" fill="#4C8577"/>
+          <path d="M40,95 Q43,86 46,95 Z" fill="#4C8577"/>
         </svg>
         <figcaption>Kennemerduinen</figcaption>
-      </figure>
-      <figure class="pf">
-        <svg viewBox="0 0 200 110" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Haarlem">
-          <rect width="200" height="110" fill="#D9F2EF"/>
-          <rect x="0" y="70" width="200" height="40" fill="#0F5C56"/>
-          <rect x="20" y="45" width="28" height="65" fill="#1FA398"/>
-          <rect x="55" y="55" width="24" height="55" fill="#2FB8C4"/>
-          <polygon points="95,55 110,20 125,55" fill="#1FA398"/>
-          <rect x="99" y="55" width="22" height="55" fill="#1FA398"/>
-          <rect x="106" y="30" width="8" height="16" fill="#1FA398"/>
-          <rect x="132" y="50" width="26" height="60" fill="#2FB8C4"/>
-          <rect x="165" y="60" width="24" height="50" fill="#1FA398"/>
-          <circle cx="108" cy="18" r="3" fill="#FF6B4A"/>
-        </svg>
-        <figcaption>Haarlem</figcaption>
-      </figure>
-      <figure class="pf">
-        <svg viewBox="0 0 200 110" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Amsterdam Noord">
-          <rect width="200" height="110" fill="#FBEBC9"/>
-          <rect x="0" y="80" width="200" height="30" fill="#0F5C56"/>
-          <rect x="15" y="55" width="50" height="30" fill="#FF6B4A" opacity="0.85"/>
-          <rect x="70" y="60" width="45" height="25" fill="#FFCC4D" opacity="0.85"/>
-          <rect x="120" y="50" width="35" height="35" fill="#1FA398"/>
-          <line x1="165" y1="85" x2="165" y2="25" stroke="#0F5C56" stroke-width="3"/>
-          <line x1="165" y1="30" x2="190" y2="45" stroke="#0F5C56" stroke-width="3"/>
-          <line x1="165" y1="30" x2="140" y2="40" stroke="#0F5C56" stroke-width="3"/>
-        </svg>
-        <figcaption>Amsterdam Noord</figcaption>
       </figure>
     </div>`;
   const intro = `<div class="intro">Alle ideeën los, per categorie — pak er 's ochtends uit wat bij het weer en jullie zin past. Geen vast schema.</div>`;
@@ -965,10 +937,10 @@ function renderAct(){
 }
 
 function renderEten(){
-  const banner = `<div class="banner" style="background:linear-gradient(135deg,#1FA398,#0F5C56);display:flex;align-items:flex-end;">
+  const banner = `<div class="banner" style="background:linear-gradient(135deg,var(--sage),var(--ink));display:flex;align-items:flex-end;">
     <svg viewBox="0 0 800 150" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg" style="position:absolute;inset:0;width:100%;height:100%;">
-      <path d="M0,110 Q120,80 260,102 T520,90 T800,100 L800,150 L0,150 Z" fill="#FBEBC9" opacity="0.35"/>
-      <path d="M0,125 Q140,150 300,120 T650,120 T800,115 L800,150 L0,150 Z" fill="#FFB238" opacity="0.3"/>
+      <path d="M0,110 Q120,80 260,102 T520,90 T800,100 L800,150 L0,150 Z" fill="#E8E1CC" opacity="0.35"/>
+      <path d="M0,125 Q140,150 300,120 T650,120 T800,115 L800,150 L0,150 Z" fill="#C1984C" opacity="0.3"/>
     </svg>
     <div class="cap" style="position:relative;">Elke dag iets lekkers 🍽️</div>
   </div>`;

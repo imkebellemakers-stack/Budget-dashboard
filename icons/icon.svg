@@ -1,17 +1,17 @@
 <svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
   <defs>
     <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#FFE9C2"/>
-      <stop offset="55%" stop-color="#FFC98A"/>
-      <stop offset="100%" stop-color="#2FB8C4"/>
+      <stop offset="0%" stop-color="#F3E4C4"/>
+      <stop offset="55%" stop-color="#E3B98C"/>
+      <stop offset="100%" stop-color="#4C8577"/>
     </linearGradient>
     <clipPath id="round"><rect width="512" height="512" rx="112" ry="112"/></clipPath>
   </defs>
   <g clip-path="url(#round)">
     <rect width="512" height="512" fill="url(#sky)"/>
-    <circle cx="368" cy="150" r="62" fill="#FFD97D" opacity="0.92"/>
-    <path d="M0,300 Q120,255 260,290 T512,278 L512,512 L0,512 Z" fill="#0F5C56" opacity="0.30"/>
-    <path d="M0,340 Q100,305 220,328 T512,320 L512,512 L0,512 Z" fill="#1FA398"/>
-    <path d="M0,385 Q90,355 200,375 T512,368 L512,512 L0,512 Z" fill="#0F5C56"/>
+    <circle cx="368" cy="150" r="62" fill="#D9B26B" opacity="0.92"/>
+    <path d="M0,300 Q120,255 260,290 T512,278 L512,512 L0,512 Z" fill="#2F4A3E" opacity="0.30"/>
+    <path d="M0,340 Q100,305 220,328 T512,320 L512,512 L0,512 Z" fill="#4C8577"/>
+    <path d="M0,385 Q90,355 200,375 T512,368 L512,512 L0,512 Z" fill="#2F4A3E"/>
   </g>
 </svg>
