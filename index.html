@@ -187,23 +187,12 @@
   .day-card .tide{font-size:10px;color:var(--muted);margin-top:7px;line-height:1.45;}
   .day-card .tide a{color:var(--accent);}
 
-  /* ---- KAART MET ROUTES ---- */
-  .map-wrap{border-radius:16px 16px 0 0;overflow:hidden;box-shadow:var(--shadow-sm);border:1px solid var(--line);border-bottom:none;}
-  #routeMap{height:260px;width:100%;background:var(--surface-2);}
-  .map-status{font-family:'DM Mono',monospace;font-size:11px;background:var(--gold);color:#3a2a05;padding:6px 12px;display:none;align-items:center;gap:6px;}
-  .map-status.show{display:flex;}
-  .route-list{background:var(--surface);border:1px solid var(--line);border-radius:0 0 16px 16px;margin-bottom:8px;box-shadow:var(--shadow-sm);}
-  .route-row{display:flex;align-items:flex-start;gap:10px;padding:10px 14px;font-size:13px;border-bottom:1px solid var(--line);}
-  .route-row:last-child{border-bottom:none;}
-  .route-row input[type="checkbox"]{margin-top:2px;width:17px;height:17px;accent-color:var(--accent);flex-shrink:0;cursor:pointer;}
-  .route-row .rt{flex:1;line-height:1.4;}
-  .route-row .rt b{color:var(--ink);font-weight:600;}
-  .route-row .badge-line{font-size:9.5px;text-transform:uppercase;letter-spacing:0.05em;background:var(--sage-soft);color:var(--sage);padding:1px 6px;border-radius:5px;margin-left:6px;white-space:nowrap;}
-  .route-row .badge-link{font-size:9.5px;text-transform:uppercase;letter-spacing:0.05em;background:var(--accent-soft);color:var(--accent);padding:1px 6px;border-radius:5px;margin-left:6px;white-space:nowrap;}
-  .route-row .rlink{display:block;font-size:11.5px;margin-top:3px;}
-  .route-row .rlink a{color:var(--accent);font-weight:600;text-decoration:none;border-bottom:1.5px solid var(--accent-soft);}
-  .leaflet-popup-content-wrapper{background:var(--surface);color:var(--text);border-radius:10px;}
-  .leaflet-popup-tip{background:var(--surface);}
+  /* ---- KAART (statische PWN-kaart) ---- */
+  .map-static-link{display:block;border-radius:16px;overflow:hidden;box-shadow:var(--shadow-sm);border:1px solid var(--line);margin-bottom:2px;}
+  .map-static{width:100%;height:auto;display:block;}
+
+  /* ---- MARKTEN-KAART (Eten-tab) ---- */
+  .market-map{height:240px;width:100%;border-radius:16px;overflow:hidden;box-shadow:var(--shadow-sm);border:1px solid var(--line);margin-bottom:10px;background:var(--surface-2);}
 </style>
 </head>
 <body>
@@ -232,7 +221,7 @@
     <div class="cd-pill" id="countdown"><span id="cdText">laden…</span></div>
     <div class="eyebrow">De Lakens · Bloemendaal aan Zee · 28 juli – 6 augustus 2026</div>
     <h1>Duin, strand &amp; zee</h1>
-    <div class="sub">Losse ideeën om per dag uit te kiezen — activiteiten, eten, koffie, koopjes, boodschappen en inpakken. Voor Imke &amp; Daan.</div>
+    <div class="sub">Losse ideeën om per dag uit te kiezen — activiteiten, eten, koffie, koopjes en inpakken. Voor Imke &amp; Daan.</div>
   </div>
 </header>
 
@@ -241,7 +230,6 @@
   <button class="tab" data-target="eten">Eten</button>
   <button class="tab" data-target="coffee">Koffie &amp; Lunch</button>
   <button class="tab" data-target="deals">Voordelig</button>
-  <button class="tab" data-target="shop">Boodschappen</button>
   <button class="tab" data-target="pack">Inpakken</button>
 </nav>
 
@@ -250,7 +238,6 @@
   <div id="etenWrap" style="display:none;"></div>
   <div id="coffeeWrap" style="display:none;"></div>
   <div id="dealsWrap" style="display:none;"></div>
-  <div id="shopWrap" style="display:none;"></div>
   <div id="packWrap" style="display:none;"></div>
 </main>
 
@@ -496,72 +483,38 @@ const DEALS = {
   ],
 };
 
-/* Boodschappen */
+/* Markten &amp; boodschappen (nu onderdeel van de Eten-tab) */
+/* Markten &amp; supermarkten — getoond op de kaart onder de Eten-tab.
+   Alleen locaties die ik met een redelijke marge kan plaatsen krijgen een
+   pin (openbare marktpleinen en bekende supermarktvestigingen); minder
+   eenduidige alternatieven staan als tekst onder de kaart. */
 const MARKETS = [
-  ["Weekmarkt Zandvoort","Grote Krocht, elke woensdag 9-16u (29/7 &amp; 5/8). Verse vis, gamba's en groente, ± 3 km fietsen."],
-  ["Botermarkt Haarlem","Woensdag 11-17u en vrijdag 10-16u. Kaas, brood, streekproducten."],
-  ["Grote Markt Haarlem","Maandag 9-16u en zaterdag 8:30-17u. Breed vers aanbod, ook non-food."],
-  ["BioMarkt Kweektuin Haarlem","1e zaterdag v/d maand (za 1/8), biologische streekproducten — vroeg komen."],
-  ["Lidl","Dichtstbijzijnde filialen in Zandvoort en Haarlem/Overveen — check de Lidl-app voor adres en folder-deals."],
-  ["SPAR op de camping","Handig voor kleine aanvullingen, maar duurder dan Lidl of de markt."],
-  ["Dirk, ALDI, Vomar of DekaMarkt","Alternatieven voor Lidl in Zandvoort/Haarlem-Overveen, afhankelijk van wat het dichtstbij zit — vergelijkbaar prijsniveau."],
+  { name:"Weekmarkt Zandvoort", coords:[52.3735,4.5295], info:"Grote Krocht, elke woensdag 9-16u (29/7 &amp; 5/8). Verse vis, gamba's en groente, ± 3 km fietsen." },
+  { name:"Botermarkt Haarlem", coords:[52.3805,4.6345], info:"Woensdag 11-17u en vrijdag 10-16u. Kaas, brood, streekproducten." },
+  { name:"Grote Markt Haarlem", coords:[52.3811,4.6362], info:"Maandag 9-16u en zaterdag 8:30-17u. Breed vers aanbod, ook non-food." },
+  { name:"BioMarkt Kweektuin Haarlem", coords:[52.3870,4.6430], info:"1e zaterdag v/d maand (za 1/8), biologische streekproducten — vroeg komen." },
+  { name:"Lidl Zandvoort", coords:[52.3745,4.5310], info:"Dichtstbijzijnde budgetsupermarkt vanaf de camping — check de Lidl-app voor folder-deals." },
+  { name:"Lidl Overveen", coords:[52.3915,4.6215], info:"Alternatief richting Haarlem, vaak te combineren met een fietsroute." },
+  { name:"SPAR op de camping", coords:[52.4010,4.5820], info:"Handig voor kleine aanvullingen, maar duurder dan Lidl of de markt." },
+];
+const MARKETS_TEXT_ONLY = [
+  ["Dirk, ALDI, Vomar of DekaMarkt","Ook prima alternatieven in Zandvoort/Haarlem-Overveen, vergelijkbaar prijsniveau — check gewoon welke het dichtstbij zit, geen vaste locatie hier op de kaart gezet."],
   ["Turkse supermarkt (Haarlem)","Voor verse groente, kruiden en pita voor een prikkie — vaak goedkoper dan de reguliere supermarkt."],
 ];
-const SHOPPING = {
-  "Vlees, vis &amp; gevogelte":[
-    ["Kip (dij &amp; filet) — gourmet, souvlaki, fajita, Aziatisch","± 1,5 kg"],
-    ["Verse worstjes / chipolata","6-8 st"],
-    ["Spareribs","1 rek"],
-    ["Kippenvleugels","± 800 g"],
-    ["Biefstuk / runderreepjes (surf &amp; turf + Aziatisch)","± 600 g"],
-    ["Krokante kipschnitzel / -filet (airfryer)","2-4 st"],
-    ["Bacon (ontbijten)","2 pakken"],
-    ["Ham (ontbijt)","1 pakje"],
-    ["Verse witvis / zeebaars — markt (wo)","2 filets"],
-    ["Garnalen &amp; gamba's — deels van de markt","± 650 g"],
-    ["Eieren","± 18 st"],
-  ],
-  "Zuivel &amp; kaas":[
-    ["Griekse yoghurt / kwark","± 1,5 kg"],
-    ["Halloumi","400 g"],
-    ["Feta","1 blok"],
-    ["Mozzarella","1-2 bollen"],
-    ["Geraspte kaas (Tex-Mex)","1 zak"],
-    ["Franse kaas (ontbijt)","1 stuk"],
-    ["Roomboter &amp; kruidenboter","1 pak + 1 rol"],
-    ["Zure room","1 bakje"],
-    ["Tzatziki (of zelf maken)","1 bakje"],
-    ["Melk voor koffie","koop vers bij"],
-    ["Hüttenkäse / cottage cheese","1-2 bakjes — eiwitrijk, lekker door de eieren of op de avocado-toast"],
-  ],
-  "Groente &amp; fruit":[
-    ["Paprika","5-6"],["Courgette","2"],["Champignons","400 g"],["Ui (rode + gewone)","4"],
-    ["Paksoi","1"],["Wortel","3"],["Sperziebonen of broccoli","300 g"],["Krieltjes","500 g"],
-    ["Maïskolven","4"],["Zoete aardappel","2"],["Avocado","4"],["Tomaat &amp; cherrytomaat","ruim"],
-    ["Komkommer","2"],["Sla / salademix","2 zakken"],["Coleslaw (of witte kool + wortel)","1"],
-    ["Basilicum, knoflook &amp; citroen",""],["Vers fruit (bessen, perzik, meloen)","ruim — vers bij"],["Diepvriesfruit (smoothie)","1 zak"],
-    ["Bevroren blauwe bessen / frambozen","1 zak — door de overnight oats, koelt de koelbox ook nog even mee"],
-  ],
-  "Brood, wraps &amp; granen":[
-    ["Stokbrood","2-3"],["Zuurdesem-/volkorenbrood","2"],["Croissants / pains au chocolat","vers bij"],
-    ["Pita","1 pak"],["Tortilla's / wraps","2 pakken"],["Turks / plat brood","1"],
-    ["Havermout &amp; granola","1 + 1 zak"],["Verse of diepvriesfriet","500 g"],["Rijst (optioneel)","1 pak"],["Pannenkoek-/wafelmix","1 pak"],
-    ["Pindakaas, jam &amp; hagelslag","voor bij het brood"],
-  ],
-  "Sauzen, kruiden &amp; smaakmakers":[
-    ["Knoflooksaus &amp; kruidenboter",""],["Hummus","1-2 bakjes"],["Olijven","1 bak"],["Pesto","1 potje"],
-    ["Ketjap manis, pindasaus, sriracha-mayo",""],["Bbq-saus &amp; bbq-kruiden",""],["Fajita-/tacokruiden","1"],
-    ["Guacamole &amp; salsa","1 + 1"],["Ahornsiroop, honing &amp; jam",""],["Mayo, curry &amp; ketchup",""],
-    ["Chimichurri (of peterselie+knoflook+olie)",""],["Olijfolie, zout &amp; peper","van huis"],
-    ["Verse kruiden: koriander, peterselie &amp; munt","aanvulling op de basilicum, voor Aziatisch/Grieks"],
-    ["Bouillonblokjes &amp; azijn","van huis, voor sausjes en marinades"],
-    ["Spuitolie (bakspray)","dun en vetarm inspuiten van gourmetplaat en airfryer-mandje, scheelt gemorste olie"],
-  ],
-  "Lekkers &amp; borrel (vakantie-extra's)":[
-    ["Chips / borrelnootjes",""],["IJsjes voor in de vriezer",""],["Drankjes naar keuze (bier / wijn / fris)",""],["Koffie","meenemen of vers"],
-    ["IJsthee &amp; bruiswater",""],["Koffiebonen (indien eigen molen/apparaat)",""],
-  ],
-};
+
+/* Vooraf mee te nemen — shelf-stable boodschappen die je al thuis kunt
+   inpakken, i.p.v. alles ter plekke te moeten kopen. */
+const PRE_SHOP = [
+  ["Olijfolie, zout &amp; peper",""],
+  ["Ketjap manis, pindasaus &amp; sriracha-mayo",""],
+  ["Bbq-saus &amp; bbq-kruiden, fajita-/tacokruiden",""],
+  ["Ahornsiroop, honing &amp; jam",""],
+  ["Bouillonblokjes &amp; azijn",""],
+  ["Pindakaas &amp; hagelslag",""],
+  ["Havermout &amp; granola",""],
+  ["Koffie(bonen) &amp; thee",""],
+  ["Spuitolie (bakspray)","dun inspuiten van gourmetplaat en airfryer-mandje"],
+];
 
 const PACKING = {
   "Kleding — Imke":[
@@ -660,123 +613,18 @@ const PACKING = {
   ],
 };
 
-/* ---------- ROUTES (kaart) ----------
-   Bloemendaal/Zandvoort/Haarlem liggen dicht genoeg bij elkaar dat een
-   vereenvoudigde lijn langs kust/weg een redelijke indicatie geeft; voor
-   de duinpaden zelf (Kennemerduinen, AWD, Amsterdam) is het exacte tracé
-   niet betrouwbaar te reconstrueren zonder een echt GPX-bestand, dus die
-   krijgen een startmarkering + de originele link. Zet je zelf een GPX-
-   bestand in /routes, dan kun je "line" hieronder vervangen door de
-   ingelezen coördinaten. */
-const ROUTES = [
-  { slug:"kennemerduinen-vogelmeer-kraansvlak", name:"Kennemerduinen — Vogelmeer &amp; Kraansvlak", type:"hike", marker:[52.408,4.589], line:null,
-    links:[{label:"AllTrails",url:"https://www.alltrails.com/trail/netherlands/north-holland/ns-wandeling-kennemerduinen"},{label:"Wandelnetwerk Bloemendaal",url:"https://www.wandelnetwerknoordholland.nl/startpunten/routes-vanaf-dit-startpunt/2628"}] },
-  { slug:"koevlak-parnassia", name:"Lange duinhike Koevlak–Parnassia", type:"hike", marker:[52.415,4.596], line:null,
-    links:[{label:"AllTrails Koevlak–Parnassia",url:"https://www.alltrails.com/trail/netherlands/north-holland/kennemerduinen-koevlak-parnassia"}] },
-  { slug:"awd-de-zilk", name:"Amsterdamse Waterleidingduinen — ingang De Zilk", type:"hike", marker:[52.305,4.546], line:null,
-    links:[{label:"Routekaart awd.waternet.nl",url:"http://awd.waternet.nl/"}] },
-  { slug:"strand-bloemendaal-zandvoort", name:"Strandwandeling Bloemendaal–Zandvoort v.v.", type:"hike", marker:null,
-    line:[[52.4025,4.5695],[52.394,4.562],[52.386,4.556],[52.3745,4.5545],[52.3705,4.5535]],
-    links:[] },
-  { slug:"noordvoort-strandpaal-64", name:"Noordvoort &amp; Strandpaal 64", type:"hike", marker:[52.345,4.545], line:null, links:[] },
-  { slug:"hofjeswandeling-haarlem", name:"Hofjeswandeling Haarlem", type:"hike", marker:[52.381,4.637], line:null, links:[] },
-  { slug:"amsterdam-noord", name:"Amsterdam-Noord wandeling", type:"hike", marker:[52.401,4.889], line:null,
-    links:[{label:"I amsterdam",url:"https://www.iamsterdam.com/zien-en-doen/natuur-en-actief/routes/wandelroute-door-ndsm"},{label:"Wikiloc GPX",url:"https://www.wikiloc.com/hiking-trails/verrassend-amsterdam-noord-13667750"}] },
-  { slug:"amsterdam-oost", name:"Amsterdam-Oost, minder standaard", type:"hike", marker:[52.360,4.933], line:null, links:[] },
-  { slug:"duin-haarlem-fiets", name:"Duin naar stad → Haarlem (fiets)", type:"bike", marker:null,
-    line:[[52.4025,4.5730],[52.3975,4.5985],[52.3875,4.6155],[52.3810,4.6360]],
-    links:[] },
-  { slug:"bloemendaal-zandvoort-boulevard-fiets", name:"Bloemendaal → Zandvoort boulevard (fiets)", type:"bike", marker:null,
-    line:[[52.4025,4.5730],[52.395,4.5665],[52.386,4.5615],[52.3745,4.5560]],
-    links:[] },
-  { slug:"buitenplaatsen-tocht", name:"Buitenplaatsen-tocht", type:"bike", marker:[52.462,4.635], line:null, links:[] },
-  { slug:"fort-vijfhuizen", name:"Fort bij Vijfhuizen — Stelling van Amsterdam", type:"bike", marker:[52.348,4.686], line:null, links:[] },
-  { slug:"kraansvlak-stop", name:"Kraansvlak-stop", type:"bike", marker:[52.408,4.589], line:null, links:[] },
-];
-
-/* Optionele upgrade: als er een .gpx-bestand met de bijbehorende "slug"
-   in /routes staat, wordt de indicatieve lijn of startmarkering hierboven
-   vervangen door het echte, ingelezen tracé. Ontbreekt het bestand (het
-   normale geval zolang je zelf niets hebt gedownload), dan gebeurt er
-   stilzwijgend niets en blijft de bestaande weergave staan. */
-function parseGpxLatLngs(gpxText){
-  const doc = new DOMParser().parseFromString(gpxText, "application/xml");
-  if(doc.querySelector("parsererror")) return null;
-  const pts = [...doc.querySelectorAll("trkpt, rtept")].map(pt => [
-    parseFloat(pt.getAttribute("lat")), parseFloat(pt.getAttribute("lon"))
-  ]).filter(([lat,lon]) => Number.isFinite(lat) && Number.isFinite(lon));
-  return pts.length >= 2 ? pts : null;
-}
-async function upgradeRoutesFromGpx(){
-  await Promise.all(ROUTES.map(async (r, i) => {
-    try{
-      const res = await fetch(`routes/${r.slug}.gpx`);
-      if(!res.ok) return;
-      const pts = parseGpxLatLngs(await res.text());
-      if(!pts) return;
-      if(routeLayers[i]) routeMapInstance.removeLayer(routeLayers[i]);
-      routeLayers[i] = L.polyline(pts, { color:'#2F4A3E', weight:4, opacity:0.9 })
-        .bindPopup(`<b>${r.name}</b><br>Ingelezen uit eigen GPX-bestand.`)
-        .addTo(routeMapInstance);
-      const row = document.querySelector(`.route-row input[data-idx="${i}"]`)?.closest('.route-row');
-      if(row){
-        const badge = row.querySelector('.badge-line, .badge-link');
-        if(badge){ badge.textContent = 'GPX-track'; badge.className = 'badge-line'; }
-      }
-    }catch(e){ /* geen bestand of netwerk niet beschikbaar — gewoon negeren */ }
-  }));
-}
-
-let routeMapInstance = null;
-let routeLayers = [];
-function toggleRoute(i, checked){
-  const layer = routeLayers[i];
-  if(!layer || !routeMapInstance) return;
-  if(checked) routeMapInstance.addLayer(layer); else routeMapInstance.removeLayer(layer);
-}
+/* ---------- KAART (statische PWN-wandel/fietskaart) ----------
+   Officiële kaart van Nationaal Park Zuid-Kennemerland (PWN, april 2026)
+   i.p.v. een zelfgetekende/benaderde interactieve kaart — de routelinks
+   (AllTrails/Wikiloc/Wandelnetwerk) staan gewoon bij de betreffende
+   activiteit hieronder in de lijst. */
 function renderRouteMap(){
-  const rows = ROUTES.map((r,i)=>{
-    const badge = r.line ? `<span class="badge-line">indicatieve lijn</span>` : `<span class="badge-link">alleen link</span>`;
-    const linkList = r.links.map(l=>`<a href="${l.url}" target="_blank" rel="noopener">${l.label}</a>`).join(' · ');
-    const rlink = linkList ? `<span class="rlink">${linkList}</span>` : (!r.line ? `<span class="rlink" style="color:var(--muted)">geen losse route-link — zie de categorie hieronder voor details</span>` : '');
-    return `<div class="route-row">
-      <input type="checkbox" checked data-idx="${i}" onchange="toggleRoute(${i},this.checked)">
-      <div class="rt"><b>${r.name}</b>${badge}${rlink}</div>
-    </div>`;
-  }).join('');
   document.getElementById('routeMapWrap').innerHTML = `
-    <div class="cat">Kaart — wandel- &amp; fietsroutes</div>
-    <div class="map-wrap">
-      <div class="map-status" id="mapStatus">🔌 geen internet — alleen eerder geladen kaartgebied zichtbaar, geen nieuwe tegels</div>
-      <div id="routeMap"></div>
-    </div>
-    <div class="route-list">${rows}</div>
-    <div class="intro">🟡 goudkleurige lijnen zijn een vereenvoudigde, indicatieve route (geen ingelezen GPX-bestand) — check bij twijfel altijd de link. Donkergroene lijnen zijn een echt ingelezen GPX-track. Routes zonder lijn tonen alleen een startmarkering; open de link voor het volledige, officiële tracé.</div>`;
-
-  routeMapInstance = L.map('routeMap', { scrollWheelZoom:false }).setView([52.398,4.60], 11);
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    maxZoom:18,
-    attribution:'&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a>-bijdragers'
-  }).addTo(routeMapInstance);
-
-  routeLayers = ROUTES.map(r=>{
-    if(r.line){
-      return L.polyline(r.line, { color:'#C1984C', weight:4, opacity:0.85 })
-        .bindPopup(`<b>${r.name}</b><br>Indicatieve, vereenvoudigde route — geen officieel GPX-bestand.`)
-        .addTo(routeMapInstance);
-    }
-    const popupLinks = r.links.length ? '<br>' + r.links.map(l=>`<a href="${l.url}" target="_blank" rel="noopener">${l.label}</a>`).join('<br>') : '';
-    return L.marker(r.marker).bindPopup(`<b>${r.name}</b>${popupLinks}`).addTo(routeMapInstance);
-  });
-
-  const mapStatus = document.getElementById('mapStatus');
-  function updateMapStatus(){ mapStatus.classList.toggle('show', !navigator.onLine); }
-  updateMapStatus();
-  window.addEventListener('online', updateMapStatus);
-  window.addEventListener('offline', updateMapStatus);
-  routeMapInstance.on('tileerror', ()=>{ if(!navigator.onLine) mapStatus.classList.add('show'); });
-
-  upgradeRoutesFromGpx();
+    <div class="cat">Kaart — Nationaal Park Zuid-Kennemerland</div>
+    <a href="images/kennemerduinen-wandelfietskaart.jpg" target="_blank" rel="noopener" class="map-static-link">
+      <img class="map-static" src="images/kennemerduinen-wandelfietskaart.jpg" alt="Wandel- en fietskaart Nationaal Park Zuid-Kennemerland (PWN)" loading="lazy">
+    </a>
+    <div class="intro">Officiële PWN-kaart, schaal 1:20.000 — tik op de kaart om 'm groot en scherp te openen en in te zoomen. De routelinks (AllTrails, Wikiloc, Wandelnetwerk) staan bij de betreffende wandel- of fietsroute hieronder.</div>`;
 }
 
 /* ---------- ZON OP/ONDER (lokale berekening, geen API nodig) ----------
@@ -945,7 +793,29 @@ function renderEten(){
     <div class="cap" style="position:relative;">Elke dag iets lekkers 🍽️</div>
   </div>`;
   const intro = `<div class="intro">Losse eet-ideeën rond de <b>airfryer</b> en <b>gourmetplaat</b> — geen calorieën tellen, gewoon kiezen waar je die dag zin in hebt. Verse vis, gamba's en fruit haal je onderweg vers op de markt of bij Berg Vis.</div>`;
-  document.getElementById("etenWrap").innerHTML = banner + intro + listHtml(ETEN);
+  const preShopRows = PRE_SHOP.map(([n,note])=>`<div class="row"><b>${n}</b>${note?` — ${note}`:""}</div>`).join("");
+  const preShop = `<div class="cat">Vooraf meenemen</div><div class="card">${preShopRows}</div>
+    <div class="intro">Scheelt zoeken in een onbekende supermarkt — de rest (vlees, vis, groente, fruit, brood) koop je vers bij op de markt of de camping.</div>`;
+  document.getElementById("etenWrap").innerHTML = banner + intro + `<div id="marketMapWrap"></div>` + preShop + listHtml(ETEN);
+  renderMarketMap();
+}
+
+function renderMarketMap(){
+  const marketRows = MARKETS.map(m=>`<div class="row"><b>${m.name}</b> — ${m.info}</div>`).join("");
+  const textOnlyRows = MARKETS_TEXT_ONLY.map(([n,w])=>`<div class="row"><b>${n}</b> — ${w}</div>`).join("");
+  document.getElementById('marketMapWrap').innerHTML = `
+    <div class="cat">Markten &amp; supermarkten</div>
+    <div id="marketMap" class="market-map"></div>
+    <div class="card">${marketRows}${textOnlyRows}</div>`;
+
+  const marketMap = L.map('marketMap', { scrollWheelZoom:false }).setView([52.392,4.585], 12);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom:18,
+    attribution:'&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a>-bijdragers'
+  }).addTo(marketMap);
+  MARKETS.forEach(m=>{
+    L.marker(m.coords).bindPopup(`<b>${m.name}</b><br>${m.info}`).addTo(marketMap);
+  });
 }
 
 function renderCoffee(){
@@ -961,19 +831,6 @@ function renderDeals(){
   </div>
   <div class="intro">Ruwe schatting, niet om op de cent te sturen. Camping en optionele extra's (festivaltickets, museum) staan er los van. De meeste maaltijden koken jullie zelf, dus de dagelijkse kosten blijven laag.</div>`;
   document.getElementById("dealsWrap").innerHTML = budget + listHtml(DEALS);
-}
-
-function renderShop(){
-  let markets = MARKETS.map(([n,w])=>`<div class="row"><b>${n}</b> — ${w}</div>`).join("");
-  let cats = "";
-  for(const [cat, items] of Object.entries(SHOPPING)){
-    const rows = items.map(([name, qty])=>`<div class="row two"><span>${name}</span>${qty?`<span class="qty">${qty}</span>`:""}</div>`).join("");
-    cats += `<div class="cat">${cat}</div><div class="card">${rows}</div>`;
-  }
-  document.getElementById("shopWrap").innerHTML =
-    `<div class="intro">Losjes samengesteld uit het vakantiemenu — hoeveelheden zijn een richtlijn. Koop verse dingen (vis, gamba's, fruit, brood) gaandeweg vers bij i.p.v. alles in één keer.</div>` +
-    `<div class="cat">Markten &amp; supermarkten</div><div class="card">${markets}</div>` +
-    cats;
 }
 
 /* ---------- PACKING (localStorage) ---------- */
@@ -1037,7 +894,7 @@ document.getElementById("themeToggle").onclick=()=>{ const c=document.documentEl
 
 /* ---------- DELEN ---------- */
 document.getElementById("shareBtn").onclick=async()=>{
-  const msg="Onze duinvakantie-planner (28 juli–6 aug, De Lakens): losse ideeën voor activiteiten, eten, koffie, koopjes, boodschappen en inpakken. Open het HTML-bestand in je browser — je eigen paklijst-vinkjes blijven apart bewaard. 🏖️";
+  const msg="Onze duinvakantie-planner (28 juli–6 aug, De Lakens): losse ideeën voor activiteiten, eten, koffie, koopjes en inpakken. Open het HTML-bestand in je browser — je eigen paklijst-vinkjes blijven apart bewaard. 🏖️";
   try{ if(navigator.share){ await navigator.share({title:"Duinvakantie-planner", text:msg}); return; } }catch(e){}
   try{ await navigator.clipboard.writeText(msg); alert("Berichtje voor Daan gekopieerd! ✅\n\nPlak het in WhatsApp en stuur dit HTML-bestand mee — dan opent Daan zijn eigen kopie."); }
   catch(e){ alert("Deel de planner met Daan door dit HTML-bestand te sturen (WhatsApp, mail of AirDrop). Hij opent het in zijn browser."); }
@@ -1047,10 +904,10 @@ document.getElementById("shareBtn").onclick=async()=>{
 const RENDERED = {};
 function show(s){
   document.querySelectorAll(".tab").forEach(b=>b.classList.toggle("active", b.dataset.target===s));
-  const map={act:"actWrap",eten:"etenWrap",coffee:"coffeeWrap",deals:"dealsWrap",shop:"shopWrap",pack:"packWrap"};
+  const map={act:"actWrap",eten:"etenWrap",coffee:"coffeeWrap",deals:"dealsWrap",pack:"packWrap"};
   for(const [k,id] of Object.entries(map)) document.getElementById(id).style.display = (k===s)?"block":"none";
   if(!RENDERED[s]){
-    ({act:renderAct,eten:renderEten,coffee:renderCoffee,deals:renderDeals,shop:renderShop,pack:renderPack}[s])();
+    ({act:renderAct,eten:renderEten,coffee:renderCoffee,deals:renderDeals,pack:renderPack}[s])();
     if(s!=="pack") RENDERED[s]=true; // pack altijd herrenderen voor voortgang
   } else if(s==="pack"){ renderPack(); }
   window.scrollTo({top:0,behavior:'smooth'});

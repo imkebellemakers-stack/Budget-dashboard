@@ -7,8 +7,8 @@
 /* Verhoog dit versienummer bij ELKE inhoudelijke wijziging aan de app —
    anders detecteert een al-geïnstalleerd toestel de update niet en blijft
    de oude, gecachete inhoud getoond worden. */
-const APP_CACHE = "duinvakantie-app-v3";
-const RUNTIME_CACHE = "duinvakantie-runtime-v3";
+const APP_CACHE = "duinvakantie-app-v4";
+const RUNTIME_CACHE = "duinvakantie-runtime-v4";
 
 const APP_SHELL = [
   "./",
@@ -25,6 +25,7 @@ const APP_SHELL = [
   "./icons/icon-512.png",
   "./icons/icon-maskable-512.png",
   "./icons/apple-touch-icon.png",
+  "./images/kennemerduinen-wandelfietskaart.jpg",
 ];
 
 self.addEventListener("install", (event) => {
