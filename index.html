@@ -184,8 +184,6 @@
   .day-card .meta{font-size:11px;color:var(--muted);display:flex;flex-direction:column;gap:3px;}
   .day-card .meta .t{font-weight:700;color:var(--ink);font-size:13px;}
   .day-card .sun{font-size:11px;color:var(--text);margin-top:8px;padding-top:8px;border-top:1px solid var(--line);display:flex;flex-direction:column;gap:3px;}
-  .day-card .tide{font-size:10px;color:var(--muted);margin-top:7px;line-height:1.45;}
-  .day-card .tide a{color:var(--accent);}
 
   /* ---- KAART (statische PWN-kaart) ---- */
   .map-static-link{display:block;border-radius:16px;overflow:hidden;box-shadow:var(--shadow-sm);border:1px solid var(--line);margin-bottom:2px;}
@@ -193,6 +191,8 @@
 
   /* ---- MARKTEN-KAART (Eten-tab) ---- */
   .market-map{height:240px;width:100%;border-radius:16px;overflow:hidden;box-shadow:var(--shadow-sm);border:1px solid var(--line);margin-bottom:10px;background:var(--surface-2);}
+  .leaflet-popup-content-wrapper{background:var(--surface);color:var(--text);border-radius:10px;}
+  .leaflet-popup-tip{background:var(--surface);}
 </style>
 </head>
 <body>
@@ -292,7 +292,7 @@ const ACTIVITIES = {
     ["Zwemmen &amp; getij","Let op de vlaggen van de strandwacht en op muistromen; zeewater is begin augustus ± 18-19°C. Bij aflandige (ooste)wind geen luchtbedden mee het water in."],
     ["Skaten of steppen op de vroege boulevard","Vóór de drukte een rustig, vlak stuk asfalt langs zee in Zandvoort — leuk met skates of longboard."],
     ["Picknick met uitzicht bij het Kopje van Bloemendaal","Fiets aan het eind van de middag de Zeeweg op (een flinke kuitentrainer) en pak een kleedje met wraps of salades uit de koeltas. Vanaf de uitkijktoren op Caprera een gratis uitzicht over Haarlem en Amsterdam aan de ene kant en duin &amp; zee aan de andere kant, mooi tijdens zonsondergang."],
-    ["Schelpen zoeken na laagwater","Bij eb ligt het strand breed en vlak — leuk rustig speurtochtje, check het laagwater-tijdstip even bij het Dagoverzicht hierboven."],
+    ["Schelpen zoeken na laagwater","Bij eb ligt het strand breed en vlak — leuk rustig speurtochtje. Check de actuele getijtafel bij Rijkswaterstaat Waterinfo of de reddingsbrigade op het strand."],
   ],
   "Romantisch — voor jullie twee":[
     ["Candlelight-picknick op het strand","Eigen kleedje, een paar waxinelichtjes in jampotjes (blijven branden bij wind) en een fles wijn, net voor zonsondergang neerzetten."],
@@ -358,6 +358,7 @@ const ACTIVITIES = {
     ["Fietsverlichting","De duinfietspaden zijn 's avonds pikdonker — zorg voor goede lampjes."],
     ["NS Dal Vrij-abonnement — daluren","Met jullie €49-abonnement reis je gratis doordeweeks van 9:00-16:00 en na 18:30, en het hele weekend. Tussen 16:00-18:30 en vóór 9:00 op werkdagen geldt het gewone tarief — plan de terugreis van een Amsterdam-dag daar even omheen."],
     ["Zwemveiligheid — vlaggen op het strand","Rood-geel = bewaakte zone tussen de vlaggen, hier zwemmen aanbevolen. Geel = gevaarlijk, extra voorzichtig. Rood = sterk afgeraden. Dubbel rood = zwemverbod. Zwart-wit geblokt = watersportzone, niet zwemmen. De Zandvoortse Reddingsbrigade hangt deze bij de reddingsposten op het strand — check even voor je het water in gaat, zeker bij aflandige wind."],
+    ["Wifi op de camping — reken er niet op","Camping-wifi is vaak traag of overbelast in het hoogseizoen. Deze planner werkt daarom na de eerste keer laden ook helemaal offline — zet 'm op je beginscherm zodra je een keer wifi/4G hebt gehad."],
   ],
 };
 
@@ -483,8 +484,7 @@ const DEALS = {
   ],
 };
 
-/* Markten &amp; boodschappen (nu onderdeel van de Eten-tab) */
-/* Markten &amp; supermarkten — getoond op de kaart onder de Eten-tab.
+/* Markten &amp; supermarkten (onderdeel van de Eten-tab) — getoond op de kaart.
    Alleen locaties die ik met een redelijke marge kan plaatsen krijgen een
    pin (openbare marktpleinen en bekende supermarktvestigingen); minder
    eenduidige alternatieven staan als tekst onder de kaart. */
@@ -608,7 +608,7 @@ const PACKING = {
     ["Too Good To Go-app installeren","om onderweg koopjes te scoren"],
     ["Gourmetvlees marineren &amp; invriezen","scheelt tijd op de camping, en dient meteen als extra koelelement onderweg"],
     ["Ontbijtporties overnight oats voorbereiden","voor de eerste ochtenden, voordat er boodschappen zijn gedaan"],
-    ["Offline kaarten downloaden (Google Maps/Maps.me)","voor het gebied Bloemendaal-Haarlem-Zandvoort-Amsterdam, voor het geval de PWA-kaart hierboven een gebied toont dat je nog niet eerder geopend hebt"],
+    ["Offline kaarten downloaden (Google Maps/Maps.me)","voor het gebied Bloemendaal-Haarlem-Zandvoort-Amsterdam — de markten-kaart in de Eten-tab werkt alleen offline voor tegels die je al eerder met wifi hebt geopend"],
     ["Campingregels checken (bbq/vuur/gourmet)","vooraf even bevestigen wat mag op jullie plek, scheelt een teleurstelling ter plekke"],
   ],
 };
@@ -724,7 +724,6 @@ async function renderDayOverview(){
       <div class="dnum">${dnum}</div>
       ${wxHtml}
       <div class="sun"><span>🌅 op ${sun.sunrise}</span><span>🌇 onder ${sun.sunset}</span></div>
-      <div class="tide">🌊 Getij: check <a href="https://waterinfo.rws.nl/" target="_blank" rel="noopener">Rijkswaterstaat Waterinfo</a> (zoek Zandvoort/IJmuiden) of de reddingsbrigade op het strand voor de actuele tafel.</div>
     </div>`;
   }).join('');
 
@@ -779,7 +778,7 @@ function renderAct(){
   document.getElementById("actWrap").innerHTML = strip + intro +
     `<div id="dayOverview"></div><div id="routeMapWrap"></div>` +
     listHtml(ACTIVITIES) +
-    `<div class="credits">Illustraties: eigen SVG's, geen externe afbeeldingen nodig. Kaart © OpenStreetMap-bijdragers. Weer via Open-Meteo.</div>`;
+    `<div class="credits">Illustratie: eigen SVG. Kaart: PWN, Wandel- en fietskaart Nationaal Park Zuid-Kennemerland. Weer via Open-Meteo.</div>`;
   renderDayOverview();
   renderRouteMap();
 }
