@@ -7,8 +7,8 @@
 /* Verhoog dit versienummer bij ELKE inhoudelijke wijziging aan de app —
    anders detecteert een al-geïnstalleerd toestel de update niet en blijft
    de oude, gecachete inhoud getoond worden. */
-const APP_CACHE = "duinvakantie-app-v7";
-const RUNTIME_CACHE = "duinvakantie-runtime-v7";
+const APP_CACHE = "duinvakantie-app-v8";
+const RUNTIME_CACHE = "duinvakantie-runtime-v8";
 
 const APP_SHELL = [
   "./",
