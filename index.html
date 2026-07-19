@@ -502,18 +502,20 @@ const MARKETS_TEXT_ONLY = [
   ["Turkse supermarkt (Haarlem)","Voor verse groente, kruiden en pita voor een prikkie — vaak goedkoper dan de reguliere supermarkt."],
 ];
 
-/* Vooraf mee te nemen — shelf-stable boodschappen die je al thuis kunt
-   inpakken, i.p.v. alles ter plekke te moeten kopen. */
-const PRE_SHOP = [
-  ["Olijfolie, zout &amp; peper",""],
-  ["Ketjap manis, pindasaus &amp; sriracha-mayo",""],
-  ["Bbq-saus &amp; bbq-kruiden, fajita-/tacokruiden",""],
-  ["Ahornsiroop, honing &amp; jam",""],
-  ["Bouillonblokjes &amp; azijn",""],
-  ["Pindakaas &amp; hagelslag",""],
-  ["Havermout &amp; granola",""],
-  ["Koffie(bonen) &amp; thee",""],
-  ["Spuitolie (bakspray)","dun inspuiten van gourmetplaat en airfryer-mandje"],
+/* Van tevoren regelen — acties/reserveringen voor vertrek, getoond op
+   Activiteiten onder het dagoverzicht. Grotendeels samengevoegd uit de
+   oude "Vooraf inkopen"-lijst (Inpakken), aangevuld met eigen suggesties. */
+const PREP_LIST = [
+  ["Tentgear testen: pomp, reparatieset &amp; extra haringen","Het belangrijkste vóór vertrek — test dit thuis, niet pas op de camping."],
+  ["Een paar flessen water invriezen","Dienen als koelelement én koud drinkwater als ze onderweg smelten."],
+  ["Gourmetvlees marineren &amp; invriezen","Scheelt tijd op de camping en dient meteen als extra koelelement onderweg."],
+  ["Ontbijtporties overnight oats voorbereiden","Voor de eerste ochtenden, voordat er boodschappen zijn gedaan."],
+  ["Offline kaarten downloaden (Google Maps/Maps.me)","Voor Bloemendaal-Haarlem-Zandvoort-Amsterdam, voor als de markten-kaart in de Eten-tab een nog niet eerder geopend gebied toont."],
+  ["Too Good To Go-app installeren","Om onderweg koopjes te scoren."],
+  ["Campingregels checken (bbq/vuur/gourmet)","Vooraf even bevestigen wat mag op jullie plek, scheelt een teleurstelling ter plekke."],
+  ["Deze planner op beide telefoons installeren","Open de link met wifi/4G en zet 'm op het beginscherm — dan werkt alles ook zonder camping-wifi."],
+  ["Reserveren waar nodig","Corrie ten Boomhuis-rondleiding (Haarlem), een escape room, de duinsauna — deze lopen soms vol."],
+  ["Post &amp; planten thuis regelen","Even geregeld voor 10 dagen weg, dan hoef je er niet meer aan te denken."],
 ];
 
 const PACKING = {
@@ -597,19 +599,18 @@ const PACKING = {
     ["Fietsslot &amp; multitool",""],
     ["Waszak",""],
   ],
-  "Vooraf inkopen (niet vergeten)":[
-    ["Pomp + reparatieset checken","het allerbelangrijkste voor de tent — test 'm thuis even"],
-    ["Extra zandharingen","voor de losse duinzandbodem"],
-    ["Ketjap, pindasaus, sriracha-mayo","voor de Aziatische gourmet-avond"],
-    ["Bbq-saus &amp; -kruiden, fajita-/tacokruiden","voor bbq en Tex-Mex"],
-    ["Ahornsiroop, knoflooksaus, kruidenboter","voor ontbijt &amp; gourmet"],
+  "Vooraf meenemen — boodschappen":[
+    ["Olijfolie, zout &amp; peper",""],
+    ["Ketjap manis, pindasaus &amp; sriracha-mayo",""],
+    ["Bbq-saus &amp; bbq-kruiden, fajita-/tacokruiden",""],
+    ["Ahornsiroop, honing &amp; jam",""],
+    ["Knoflooksaus &amp; kruidenboter",""],
+    ["Bouillonblokjes &amp; azijn",""],
+    ["Pindakaas &amp; hagelslag",""],
+    ["Havermout &amp; granola",""],
+    ["Koffie(bonen) &amp; thee",""],
+    ["Spuitolie (bakspray)","dun inspuiten van gourmetplaat en airfryer-mandje"],
     ["Airfryer-bakpapiervellen","scheelt schoonmaken op de camping"],
-    ["Bevries vooraf een paar flessen water","dienen als koelelement én koud drinkwater als ze smelten"],
-    ["Too Good To Go-app installeren","om onderweg koopjes te scoren"],
-    ["Gourmetvlees marineren &amp; invriezen","scheelt tijd op de camping, en dient meteen als extra koelelement onderweg"],
-    ["Ontbijtporties overnight oats voorbereiden","voor de eerste ochtenden, voordat er boodschappen zijn gedaan"],
-    ["Offline kaarten downloaden (Google Maps/Maps.me)","voor het gebied Bloemendaal-Haarlem-Zandvoort-Amsterdam — de markten-kaart in de Eten-tab werkt alleen offline voor tegels die je al eerder met wifi hebt geopend"],
-    ["Campingregels checken (bbq/vuur/gourmet)","vooraf even bevestigen wat mag op jullie plek, scheelt een teleurstelling ter plekke"],
   ],
 };
 
@@ -733,7 +734,7 @@ async function renderDayOverview(){
       ? `<div class="weather-status offline">📴 Geen actuele verbinding — laatst bekende weerdata van ${timeAgo(wx.fetchedAt)}</div>`
       : `<div class="weather-status offline">📴 Geen verbinding en nog geen eerdere weerdata opgeslagen.</div>`;
 
-  el.innerHTML = `<div class="cat">Dagoverzicht — weer, zon &amp; getij</div>${statusLine}<div class="day-strip">${cards}</div>`;
+  el.innerHTML = `<div class="cat">Dagoverzicht — weer &amp; zon</div>${statusLine}<div class="day-strip">${cards}</div>`;
 }
 
 /* ---------- COUNTDOWN ---------- */
@@ -775,8 +776,10 @@ function renderAct(){
       </figure>
     </div>`;
   const intro = `<div class="intro">Alle ideeën los, per categorie — pak er 's ochtends uit wat bij het weer en jullie zin past. Geen vast schema.</div>`;
+  const prepRows = PREP_LIST.map(([n,note])=>`<div class="row"><b>${n}</b>${note?` — ${note}`:""}</div>`).join("");
+  const prepList = `<div class="cat">Van tevoren regelen</div><div class="card">${prepRows}</div>`;
   document.getElementById("actWrap").innerHTML = strip + intro +
-    `<div id="dayOverview"></div><div id="routeMapWrap"></div>` +
+    `<div id="dayOverview"></div>` + prepList + `<div id="routeMapWrap"></div>` +
     listHtml(ACTIVITIES) +
     `<div class="credits">Illustratie: eigen SVG. Kaart: PWN, Wandel- en fietskaart Nationaal Park Zuid-Kennemerland. Weer via Open-Meteo.</div>`;
   renderDayOverview();
@@ -792,10 +795,7 @@ function renderEten(){
     <div class="cap" style="position:relative;">Elke dag iets lekkers 🍽️</div>
   </div>`;
   const intro = `<div class="intro">Losse eet-ideeën rond de <b>airfryer</b> en <b>gourmetplaat</b> — geen calorieën tellen, gewoon kiezen waar je die dag zin in hebt. Verse vis, gamba's en fruit haal je onderweg vers op de markt of bij Berg Vis.</div>`;
-  const preShopRows = PRE_SHOP.map(([n,note])=>`<div class="row"><b>${n}</b>${note?` — ${note}`:""}</div>`).join("");
-  const preShop = `<div class="cat">Vooraf meenemen</div><div class="card">${preShopRows}</div>
-    <div class="intro">Scheelt zoeken in een onbekende supermarkt — de rest (vlees, vis, groente, fruit, brood) koop je vers bij op de markt of de camping.</div>`;
-  document.getElementById("etenWrap").innerHTML = banner + intro + `<div id="marketMapWrap"></div>` + preShop + listHtml(ETEN);
+  document.getElementById("etenWrap").innerHTML = banner + intro + `<div id="marketMapWrap"></div>` + listHtml(ETEN);
   renderMarketMap();
 }
 
